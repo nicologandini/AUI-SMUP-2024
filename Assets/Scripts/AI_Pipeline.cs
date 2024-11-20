@@ -41,6 +41,7 @@ namespace AI_Pipeline {
             print("talking");
             canTalk= false;
             string text = await sst.SpeechToText();
+            text = $"Utente1 dice: {text}";
             string response = await ai_Conversation.SubmitChat(text);
             await tts.TextToSpeech(response);
 
