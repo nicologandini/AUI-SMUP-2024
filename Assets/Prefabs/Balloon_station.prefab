@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 7088737513728032618}
   - component: {fileID: 5198859153692251477}
   - component: {fileID: 7319700905042344710}
+  - component: {fileID: 696979677160508572}
   m_Layer: 0
   m_Name: Trigger_cube
   m_TagString: Untagged
@@ -356,6 +357,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &696979677160508572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8263245341039637965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e4e78a7042b9487bb77945533566420, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  signObject: {fileID: 0}
 --- !u!1 &8270586561637274497
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,35 +1,28 @@
 using UnityEngine;
-using System.Collection.Generic;
-using System.Collections
+using System.Collections.Generic;
+using System.Collections;
 
 public class ColliderDetection : MonoBehaviour
 {
-    public AudioSource audioSource;
-    public GameObject enemy;
-    public GameObject signObject;
-    private bool activated = false;
+	private GameObject collidingObject = null;
     
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider c)
     {
-        Debug.Log("im the trigger, someone has entered");
-        if (other.tag == "Balloon")
+        Debug.Log("I'm the trigger, someone has entered");
+        if (c.tag == "SortingObject")  // If the tag of the object is equal to "SortingObject"
         {
-            signObject.SetActive(true);
-            if (!activated)
-            {
-                activated = true;
-                audioSource.enabled = true;
-                enemy.SetActive(true);
-            }
+			Debug.Log("Collision on the delivery point by " + c.gameObject.GetInstanceID());
+            collidingObject = c.gameObject;
         }
     }
     
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider c)
     {
         Debug.Log("Exit event");
-        if (other.tag == "Balloon")
+        if (c.tag == "SortingObject")
         {
-            signObject.SetActive(false);
+			Debug.Log("Free");
+			collidingObject = null;
         }
     }
 }
