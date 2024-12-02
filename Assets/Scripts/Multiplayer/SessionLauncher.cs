@@ -120,8 +120,9 @@ namespace SMUP.Multiplayer
         {
             Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1) {
-                Debug.Log("We load the game room");
+            //PhotonNetwork.CurrentRoom.PlayerCount == 1
+            if (true) {
+                Debug.Log($"We load the game room with {PhotonNetwork.CurrentRoom.PlayerCount} players");
 
                 // #Critical
                 // Load the Room Level.

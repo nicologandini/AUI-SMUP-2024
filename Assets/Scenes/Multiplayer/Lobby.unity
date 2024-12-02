@@ -149,7 +149,7 @@ MonoBehaviour:
   maxPlayersPerRoom: 2
   controlPanel: {fileID: 115182996}
   progressLabel: {fileID: 285976773}
-  mainSceneName: OutsideScene
+  mainSceneName: OutsideMultiplayer
 --- !u!1 &752378639
 GameObject:
   m_ObjectHideFlags: 0

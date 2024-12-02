@@ -50,6 +50,8 @@ namespace SMUP.Multiplayer
 
             if (PhotonNetwork.IsMasterClient) {
                 Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
+
+                LoadArena();
             }
         }
     #endregion
@@ -69,7 +71,8 @@ namespace SMUP.Multiplayer
                 Debug.LogWarning("PhotonNetwork : Trying to Load a level but we are not the master Client");
                 return;
             }
-            Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
+            Debug.LogFormat("PhotonNetwork : Loading OutsideScene");
+            PhotonNetwork.LoadLevel("OutsideMultiplayer");
         }
     #endregion
     }
