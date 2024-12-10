@@ -30,11 +30,12 @@ public class AI_STT_continuous : MonoBehaviour
     void Start()
     {
     #if PLATFORM_ANDROID
-        message = "Waiting for mic permission";
-        if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
-        {
-            Permission.RequestUserPermission(Permission.Microphone);
-        }
+        // message = "Waiting for mic permission";
+        // if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
+        // {
+        //     Permission.RequestUserPermission(Permission.Microphone);
+        micPermissionGranted = true;
+        // }
     #else
         micPermissionGranted = true;
     #endif
