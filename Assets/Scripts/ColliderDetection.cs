@@ -11,8 +11,10 @@ public class ColliderDetection : MonoBehaviour
         Debug.Log("I'm the trigger, someone has entered");
         if (c.tag == "SortingObject")  // If the tag of the object is equal to "SortingObject"
         {
-			Debug.Log("Collision on the delivery point by " + c.gameObject.GetInstanceID());
             collidingObject = c.gameObject;
+            Debug.Log("Collision on the delivery point by " + collidingObject.GetInstanceID());
+            Debug.Log(this.transform.parent.gameObject);
+            SingletonScript.Instance.stationOcc(this.transform.parent.gameObject);
         }
     }
     
@@ -23,6 +25,7 @@ public class ColliderDetection : MonoBehaviour
         {
 			Debug.Log("Free");
 			collidingObject = null;
+            SingletonScript.Instance.stationAv(this.transform.parent.gameObject);
         }
     }
 }
