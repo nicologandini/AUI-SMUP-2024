@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using static Game;
 
 public class SingletonScript : MonoBehaviour
 {
@@ -42,4 +44,5 @@ public class SingletonScript : MonoBehaviour
         childOk.gameObject.SetActive(false);
         childOcc.gameObject.SetActive(true);
     }
+
 }

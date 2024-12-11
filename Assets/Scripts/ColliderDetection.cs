@@ -1,10 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using System.Text.RegularExpressions;
+using static Game;
 
 public class ColliderDetection : MonoBehaviour
 {
 	private GameObject collidingObject = null;
+    private GameObject cObj = null;
+    private string regex = @"[1]"; // il nome del palloncino deve contenere almeno un '1'
     
     private void OnTriggerEnter(Collider c)
     {
@@ -15,6 +19,23 @@ public class ColliderDetection : MonoBehaviour
             Debug.Log("Collision on the delivery point by " + collidingObject.GetInstanceID());
             Debug.Log(this.transform.parent.gameObject);
             SingletonScript.Instance.stationOcc(this.transform.parent.gameObject);
+
+            // RegEx per sapere a che lato appartiene il palloncino
+            Regex r = new Regex(regex, RegexOptions.IgnoreCase);
+            Match m = r.Match(collidingObject.name);
+            
+            // entra nell'if se il palloncino � sul tavolo _R
+            if (m.Success)
+            {
+                Debug.Log("match");
+                GameInstance.addBalloon(true, collidingObject.GetComponent<Renderer>().material, this.transform.parent.gameObject);
+
+            } else
+            {
+                Debug.Log("match");
+                GameInstance.addBalloon(false, collidingObject.GetComponent<Renderer>().material, this.transform.parent.gameObject);
+            }
+
         }
     }
     
@@ -26,6 +47,23 @@ public class ColliderDetection : MonoBehaviour
 			Debug.Log("Free");
 			collidingObject = null;
             SingletonScript.Instance.stationAv(this.transform.parent.gameObject);
+
+            cObj = c.gameObject;
+
+            // RegEx per sapere a che lato appartiene il palloncino
+            Regex r = new Regex(regex, RegexOptions.IgnoreCase);
+            Match m = r.Match(cObj.name);
+
+            // entra nell'if se il palloncino e' sul tavolo _R
+            if (m.Success)
+            {
+                GameInstance.removeBalloon(true, cObj.GetComponent<Renderer>().material, this.transform.parent.gameObject);
+
+            }
+            else
+            {
+                GameInstance.removeBalloon(false, cObj.GetComponent<Renderer>().material, this.transform.parent.gameObject);
+            }
         }
     }
 }
