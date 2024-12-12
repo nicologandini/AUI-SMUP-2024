@@ -40,9 +40,12 @@ public class SingletonScript : MonoBehaviour
         Transform childAv = station.transform.Find(plateAv);
         Transform childOk = station.transform.Find(plateOk);
         Transform childOcc = station.transform.Find(plateOcc);
-        childAv.gameObject.SetActive(false);
-        childOk.gameObject.SetActive(false);
-        childOcc.gameObject.SetActive(true);
+        //childAv.gameObject.SetActive(false);
+        //childOk.gameObject.SetActive(false);
+        //childOcc.gameObject.SetActive(true);
+
+        // modo alternativo di cambiare materiale 
+        childAv.gameObject.GetComponent<Renderer>().material = Resources.Load("grey", typeof(Material)) as Material;
     }
 
 }

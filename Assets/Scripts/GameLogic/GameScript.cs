@@ -34,15 +34,18 @@ public class Game : MonoBehaviour
     void Start()
     {
         GameInstance = this;
-        Debug.Log("UTU AMADRE");
         Debug.Log(deliveredBalloons_L.Length);
         for (int i = 0; i < 6; i++)
         {
-            deliveredBalloons_L[i] = 11; // libero
+            deliveredBalloons_L[i] = 11; // 11 = libero
+            deliveredBalloons_R[i] = 11; //
         }
 
-
-        Debug.Log(stations[0]);
+        // per rendere i due bottoni "vecchi" invisibili
+        GameObject button_old = GameObject.Find("PushButton_old");
+        GameObject button_old1 = GameObject.Find("PushButton (1)_old");
+        button_old.SetActive(false);
+        button_old1.SetActive(false);
 
         foreach (GameObject station in stations)
         {
@@ -68,21 +71,23 @@ public class Game : MonoBehaviour
         int stationIndex = returnStationIndex(station);
         int color = returnColor(mat);
 
-        if (deliveredBalloons_R[stationIndex] != 30) // se la stazione non e' gia' occupata entra nell'if
-        {
-            if (position)
+        
+        if (position) {
+            if (deliveredBalloons_R[stationIndex] == 11) // se la stazione non e' gia' occupata entra nell'if
             {
-                Debug.Log(mat.name);
+                //Debug.Log(mat.name);
                 deliveredBalloons_R[stationIndex] = color;
                 Debug.Log("aggiunto palloncino di colore " + mat.name + " in posizione " + (stationIndex + 1));
             }
-            else
+        } else {
+            if (deliveredBalloons_L[stationIndex] == 11) // se la stazione non e' gia' occupata entra nell'if
             {
-                Debug.Log(deliveredBalloons_L.Length);
+                //Debug.Log(deliveredBalloons_L.Length);
                 deliveredBalloons_L[stationIndex] = color;//mat.name;
                 Debug.Log("aggiunto palloncino di colore " + mat.name + " in posizione " + (stationIndex + 1));
             }
         }
+        
     }
 
     public void removeBalloon(bool position, Material mat, GameObject station)
@@ -91,18 +96,18 @@ public class Game : MonoBehaviour
         int color = returnColor(mat);
 
         if (position) {
-            deliveredBalloons_R[color] = 30; // occupato
+            deliveredBalloons_R[color] = 11; // ora libero
             Debug.Log("rimosso palloncino di colore " + mat.name + " in posizione " + (stationIndex + 1));
         }
         else {
-            deliveredBalloons_L[color] = 30; // occupato
+            deliveredBalloons_L[color] = 11; // ora libero
             Debug.Log("rimosso palloncino di colore " + mat.name + " in posizione " + (stationIndex + 1));
             Debug.Log(deliveredBalloons_L[color]);
         }
 
     }
 
-    public bool performMatch()
+    public void performMatch()
     {
         // Itera per tutti gli elementi degli array deliveredBalloons, che in ogni posizione (stazione) contengono gli indici relativi ai colori
         for (int i = 0; i < 6; i++)
@@ -111,15 +116,14 @@ public class Game : MonoBehaviour
             {
                 Debug.Log("not a match");
 
-                // Da implementare chiamata da premuta del bottone
                 // Da implementare il ritorno dei palloncini ai posti di partenza
 
-                return false;
+                return;
             }
         }
 
         Debug.Log("match!");
-        return true;
+        return;
     }
 
     private int returnStationIndex(GameObject station)
