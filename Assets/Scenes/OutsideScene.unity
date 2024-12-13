@@ -119,69 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &4349028
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.417
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.6002711
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3.015
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_Name
-      value: PushButton (1)_old
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -7069634194989937786, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 155577577}
-    - targetCorrespondingSourceObject: {fileID: -7069634194989937786, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 155577581}
-  m_SourcePrefab: {fileID: 100100000, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
 --- !u!1 &7753963
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,177 +1208,6 @@ MonoBehaviour:
   m_Image: {fileID: 357356508}
   m_CanvasGroup: {fileID: 0}
   m_IgnoreAlpha: 0
---- !u!1 &155577575 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -7069634194989937786, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-  m_PrefabInstance: {fileID: 4349028}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &155577577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155577575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_InteractionManager: {fileID: 0}
-  m_Colliders: []
-  m_InteractionLayers:
-    m_Bits: 1
-  m_DistanceCalculationMode: 1
-  m_SelectMode: 0
-  m_FocusMode: 1
-  m_CustomReticle: {fileID: 0}
-  m_AllowGazeInteraction: 0
-  m_AllowGazeSelect: 0
-  m_OverrideGazeTimeToSelect: 0
-  m_GazeTimeToSelect: 0.5
-  m_OverrideTimeToAutoDeselectGaze: 0
-  m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 0
-  m_FirstHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ButtonAction, Assembly-CSharp
-        m_MethodName: clickButton
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_FirstFocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastFocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Activated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Deactivated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_StartingInteractionStrengthFilters: []
---- !u!114 &155577581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155577575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 115f1a2a50d85cd4b9d6dad4c95622be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Interactable: {fileID: 155577577}
-  m_PokeCollider: {fileID: 0}
-  m_PokeConfiguration:
-    m_UseConstant: 1
-    m_ConstantValue:
-      m_PokeDirection: 3
-      m_InteractionDepthOffset: 0
-      m_EnablePokeAngleThreshold: 1
-      m_PokeAngleThreshold: 45
-    m_Variable: {fileID: 0}
---- !u!1001 &163476461
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.426334
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.6002711
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3.059
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      propertyPath: m_Name
-      value: PushButton_old
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -7069634194989937786, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 741393757}
-  m_SourcePrefab: {fileID: 100100000, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
 --- !u!1001 &172194805
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1539,6 +1305,10 @@ PrefabInstance:
     - target: {fileID: 3774224719332073111, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_Name
       value: Balloon_station_4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
@@ -1695,6 +1465,10 @@ PrefabInstance:
     - target: {fileID: 3774224719332073111, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_Name
       value: Balloon_station_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
@@ -4343,6 +4117,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Balloon_station_5_R
       objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
       value: 5
@@ -4770,6 +4548,10 @@ PrefabInstance:
     - target: {fileID: 3774224719332073111, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_Name
       value: Balloon_station_6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
@@ -7027,95 +6809,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 422068, guid: 9ad607532c614c54ebd43e913aaf8857, type: 3}
   m_PrefabInstance: {fileID: 737261126}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &741393755 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -7069634194989937786, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
-  m_PrefabInstance: {fileID: 163476461}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &741393757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741393755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_InteractionManager: {fileID: 0}
-  m_Colliders: []
-  m_InteractionLayers:
-    m_Bits: 1
-  m_DistanceCalculationMode: 1
-  m_SelectMode: 0
-  m_FocusMode: 1
-  m_CustomReticle: {fileID: 0}
-  m_AllowGazeInteraction: 0
-  m_AllowGazeSelect: 0
-  m_OverrideGazeTimeToSelect: 0
-  m_GazeTimeToSelect: 0.5
-  m_OverrideTimeToAutoDeselectGaze: 0
-  m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 0
-  m_FirstHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ButtonAction, Assembly-CSharp
-        m_MethodName: clickButton
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_FirstFocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastFocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Activated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Deactivated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_StartingInteractionStrengthFilters: []
 --- !u!1001 &742484654
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9976,6 +9669,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Balloon_station_2_R
       objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
       value: 2
@@ -10425,6 +10122,10 @@ PrefabInstance:
     - target: {fileID: 3774224719332073111, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_Name
       value: Balloon_station_3_R
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
@@ -11473,6 +11174,10 @@ PrefabInstance:
     - target: {fileID: 3774224719332073111, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_Name
       value: Balloon_station_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
@@ -16179,6 +15884,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Balloon_station_5
       objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
       value: 5
@@ -18281,28 +17990,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef3cb45a9b034448a8f3577887f4b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stations:
+  stationsPlayer1:
   - {fileID: 800090558}
   - {fileID: 806431881}
   - {fileID: 1036972240}
   - {fileID: 1405154571}
   - {fileID: 672147497}
   - {fileID: 1410695400}
-  balloons_L:
+  balloonsPlayer1:
   - {fileID: 1602055374}
   - {fileID: 1940219862}
   - {fileID: 352837042}
   - {fileID: 941998334}
   - {fileID: 1220319517}
   - {fileID: 1260760104}
-  stations_R:
+  stationsPlayer2:
   - {fileID: 485380589}
   - {fileID: 30616677}
   - {fileID: 786827791}
   - {fileID: 752730291}
   - {fileID: 661234805}
   - {fileID: 1881233335}
-  balloons_R:
+  balloonsPlayer2:
   - {fileID: 333574602}
   - {fileID: 593009086}
   - {fileID: 522527136}
@@ -21168,6 +20877,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Balloon_station_6_R
       objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
       value: 6
@@ -21993,6 +21706,10 @@ PrefabInstance:
     - target: {fileID: 3774224719332073111, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_Name
       value: Balloon_station_4_R
+      objectReference: {fileID: 0}
+    - target: {fileID: 4036850838790928466, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
+      propertyPath: m_text
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6405105752808901897, guid: 54afd7cee9e3a40cb83ffc635b7ff0a5, type: 3}
       propertyPath: m_text
@@ -23959,8 +23676,6 @@ SceneRoots:
   - {fileID: 1072584012}
   - {fileID: 1860797952}
   - {fileID: 765838265}
-  - {fileID: 163476461}
-  - {fileID: 4349028}
   - {fileID: 1645648873}
   - {fileID: 1361136802}
   - {fileID: 1861699962}

@@ -16,54 +16,24 @@ public class ColliderDetection : MonoBehaviour
         if (c.tag == "SortingObject")  // If the tag of the object is equal to "SortingObject"
         {
             collidingObject = c.gameObject;
-            Debug.Log("Collision on the delivery point by " + collidingObject.GetInstanceID());
-            Debug.Log(this.transform.parent.gameObject);
-            SingletonScript.Instance.stationOcc(this.transform.parent.gameObject);
-
-            // RegEx per sapere a che lato appartiene il palloncino
-            Regex r = new Regex(regex, RegexOptions.IgnoreCase);
-            Match m = r.Match(collidingObject.name);
+            Debug.Log("Collision on " + this.transform.parent.gameObject + " by " + collidingObject);  //.getInstanceID()
+            // Change the plate colour
+            SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "grey");
             
-            // entra nell'if se il palloncino � sul tavolo _R
-            if (m.Success)
-            {
-                Debug.Log("match");
-                GameInstance.addBalloon(true, collidingObject.GetComponent<Renderer>().material, this.transform.parent.gameObject);
-
-            } else
-            {
-                Debug.Log("match");
-                GameInstance.addBalloon(false, collidingObject.GetComponent<Renderer>().material, this.transform.parent.gameObject);
-            }
-
+            GameInstance.addBalloon(collidingObject, this.transform.parent.gameObject);
         }
     }
     
     private void OnTriggerExit(Collider c)
     {
-        Debug.Log("Exit event");
+        Debug.Log("Exit event from the trigger");
         if (c.tag == "SortingObject")
         {
-			Debug.Log("Free");
-			collidingObject = null;
-            SingletonScript.Instance.stationAv(this.transform.parent.gameObject);
+			Debug.Log("Free Young Thug");
+            SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "yellow");
 
-            cObj = c.gameObject;
-
-            // RegEx per sapere a che lato appartiene il palloncino
-            Regex r = new Regex(regex, RegexOptions.IgnoreCase);
-            Match m = r.Match(cObj.name);
-
-            // entra nell'if se il palloncino e' sul tavolo _R
-            if (m.Success)
-            {
-                GameInstance.removeBalloon(true, cObj.GetComponent<Renderer>().material, this.transform.parent.gameObject);
-
-            }
-            else
-            {
-                GameInstance.removeBalloon(false, cObj.GetComponent<Renderer>().material, this.transform.parent.gameObject);
-            }
+            GameInstance.removeBalloon(collidingObject, this.transform.parent.gameObject);
+            collidingObject = null;
         }
     }
 }
