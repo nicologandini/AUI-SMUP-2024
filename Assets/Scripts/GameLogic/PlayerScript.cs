@@ -45,15 +45,22 @@ public class Player{
 
     public List<GameObject> getDeliveredBalloons(){
         List<GameObject> t = new List<GameObject>();
-        try{
-            foreach(KeyValuePair<GameObject, GameObject> pair in this.deliveredItems){
-                Debug.Log(pair.Value);
-                t.Add(pair.Value);
-            }
+        foreach(GameObject s in stations){
+            t.Add((GameObject)this.deliveredItems[s]);
         }
-        catch (InvalidCastException e){
-            t = null;
+        if(t.Contains(null)){
+            return null;
         }
         return t;
     }
 }
+
+
+
+
+
+
+
+
+
+

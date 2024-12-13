@@ -113,6 +113,7 @@ public class Game : MonoBehaviour
             for(int j=0; j<matrix[i].Count; j++){  // Iterate thru rows
                 Material mat1 = matrix[j][i].GetComponent<Renderer>().material;
                 Material mat2 = matrix[j][i+1].GetComponent<Renderer>().material;
+                Debug.Log(mat1 + " - " + mat2);
                 if(mat1 != mat2){  // Material of the balloons must be the same.
                     Debug.Log("Not a match!");
                     return;
@@ -189,36 +190,36 @@ public class Game : MonoBehaviour
     //     return;
     // }
 
-    private int returnStationIndex(GameObject station)
-    {
-        if (station.name == "Balloon_station_1" || station.name == "Balloon_station_1_R")
-        {
-            return 0;
-        } else if (station.name == "Balloon_station_2" || station.name == "Balloon_station_2_R")
-        {
-            return 1;
-        }
-        else if (station.name == "Balloon_station_3" || station.name == "Balloon_station_3_R")
-        {
-            return 2;
-        }
-        else if (station.name == "Balloon_station_4" || station.name == "Balloon_station_4_R")
-        {
-            return 3;
-        }
-        else if (station.name == "Balloon_station_5" || station.name == "Balloon_station_5_R")
-        {
-            return 4;
-        }
-        else if (station.name == "Balloon_station_6" || station.name == "Balloon_station_6_R")
-        {
-            return 5;
-        } else
-        {
-            return 0;
-        }
+    // private int returnStationIndex(GameObject station)
+    // {
+    //     if (station.name == "Balloon_station_1" || station.name == "Balloon_station_1_R")
+    //     {
+    //         return 0;
+    //     } else if (station.name == "Balloon_station_2" || station.name == "Balloon_station_2_R")
+    //     {
+    //         return 1;
+    //     }
+    //     else if (station.name == "Balloon_station_3" || station.name == "Balloon_station_3_R")
+    //     {
+    //         return 2;
+    //     }
+    //     else if (station.name == "Balloon_station_4" || station.name == "Balloon_station_4_R")
+    //     {
+    //         return 3;
+    //     }
+    //     else if (station.name == "Balloon_station_5" || station.name == "Balloon_station_5_R")
+    //     {
+    //         return 4;
+    //     }
+    //     else if (station.name == "Balloon_station_6" || station.name == "Balloon_station_6_R")
+    //     {
+    //         return 5;
+    //     } else
+    //     {
+    //         return 0;
+    //     }
 
-    }
+    // }
 
     // private int returnColor(Material mat)
     // {

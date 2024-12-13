@@ -7,8 +7,6 @@ using static Game;
 public class ColliderDetection : MonoBehaviour
 {
 	private GameObject collidingObject = null;
-    private GameObject cObj = null;
-    private string regex = @"[1]"; // il nome del palloncino deve contenere almeno un '1'
     
     private void OnTriggerEnter(Collider c)
     {
