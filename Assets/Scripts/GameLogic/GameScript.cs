@@ -72,26 +72,37 @@ public class Game : MonoBehaviour
     }
 
     public void addBalloon(GameObject balloon, GameObject station){
-        foreach(Player p in players){
+        //foreach(Player p in players){
+        Player p = getPlayer(balloon);
             Debug.Log("Sto cercando il palloncino " + balloon + balloon.GetInstanceID() + " e la stazione " + station + station.GetInstanceID() + " nel player ");
-            if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon)){
+            Debug.Log(p.getStations().Contains(station));
+            Debug.Log(p.getBalloons().Contains(balloon));
+            Debug.Log(p.containsBalloon(station));
+            if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon) && !p.containsBalloon(station)){
+                Debug.Log("Entering addBalloon if");
                 p.addDeliveredBalloon(balloon, station);
-                Debug.Log("Balloon " + balloon + " added on the station " + station);
+                Debug.Log("Balloon " + p.getBalloon(station) + " added on the station " + station);
                 return;
             }
-        }
+        //}
         Debug.Log("Balloon positioned on the wrong station");
+        Debug.Log("Situation on " + station + ": " + p.getBalloon(station));
     }
 
     public void removeBalloon(GameObject balloon, GameObject station){
-        foreach(Player p in players){
-            if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon)){
+        //foreach(Player p in players){
+        Player p = getPlayer(balloon);
+            if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon) && p.removeBalloon(balloon, station))
+            {
+                Debug.Log("entering removeBalloon if");
                 p.removeDeliveredBalloon(station);
                 Debug.Log("Balloon " + balloon + " removed from the station " + station);
+                Debug.Log("Situation on " + station + ": " + p.getBalloon(station));
                 return;
             }
-        }
+        //}
         Debug.Log("Error during removing balloon" + balloon + " from the station " + station);
+        Debug.Log("Situation on " + station + ": " + p.getBalloon(station));
     }
 
     public void performMatch(){
@@ -101,6 +112,13 @@ public class Game : MonoBehaviour
             return;
         }
 
+        if (!getLists())
+        {
+            Debug.Log("not a match");
+            return;
+        }
+
+        /*
         foreach(Player p in players){
             if(p.getDeliveredBalloons() is null){
                 Debug.Log("Not all the stations are occupied by a balloon! Match not possible");
@@ -119,8 +137,39 @@ public class Game : MonoBehaviour
                     return;
                 }
             }
-        }
+        }*/
         Debug.Log("Match!");
+    }
+
+    public Player getPlayer(GameObject balloon)
+    {
+        foreach(Player p in players)
+        {
+            if (p.getBalloons().Contains(balloon))
+            {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    private bool getLists()
+    {
+        Player p0 = players[0];
+        Player p1 = players[1];
+        
+        for (int i = 0; i < 6; i++)
+        {
+            if (p0.getBalloon(p0.getStation(i)).GetComponent<Renderer>().material.name != p1.getBalloon(p1.getStation(i)).GetComponent<Renderer>().material.name || p0.getBalloon(p0.getStation(i)) == null)
+            {
+                Debug.Log("error on station: " + p0.getStation(i));
+                Debug.Log(p0.getBalloon(p0.getStation(i)).GetComponent<Renderer>().material);
+                Debug.Log(p1.getBalloon(p1.getStation(i)).GetComponent<Renderer>().material);
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

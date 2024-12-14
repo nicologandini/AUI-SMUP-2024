@@ -53,6 +53,42 @@ public class Player{
         }
         return t;
     }
+
+    public bool containsBalloon(GameObject station)
+    {
+        if (deliveredItems[station] != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // Ci sono due casi di collider exit: uno in cui la stazione era già occupata e l'altro in cui la stazione era libera,
+    // il metodo removeDeliveredBalloon deve essere chiamato solo nel secondo caso, cioè quando il palloncino che sta uscendo ha lo stesso
+    // materiale del palloncino che stava entrando (if material == material). In questo caso il metodo ritorna TRUE
+    public bool removeBalloon(GameObject balloon, GameObject station)
+    {
+        if (containsBalloon(station))
+        {
+            GameObject obj = (GameObject)deliveredItems[station];
+            if (obj.GetComponent<Renderer>().material == balloon.GetComponent<Renderer>().material)
+            {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public GameObject getBalloon(GameObject station)
+    {
+        return (GameObject)deliveredItems[station];
+    }
+
+    public GameObject getStation(int index)
+    {
+        return stations[index];
+    }
 }
 
 
