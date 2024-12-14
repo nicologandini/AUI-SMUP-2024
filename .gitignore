@@ -27,6 +27,9 @@
 .vs/
 .vscode/
 
+# Rider JetBrains
+.idea/
+
 # Gradle cache directory
 .gradle/
 
