@@ -21,6 +21,8 @@ public class Game : MonoBehaviour
 
     int balloons_counter = 0;
 
+    Player p0, p1;
+
     public static Game GameInstance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -40,7 +42,10 @@ public class Game : MonoBehaviour
         players.Add(new Player(balloonsPlayer1, stationsPlayer1));
         players.Add(new Player(balloonsPlayer2, stationsPlayer2));
 
-        foreach(Player p in players){
+        p0 = players[0];
+        p1 = players[1];
+
+        foreach (Player p in players){
             for(int i=0; i<p.getStations().Count; i++) {
                 Debug.Log("Stazione " + p.getStations()[i] + " " + p.getStations()[i].GetInstanceID() + " - " + p.getBalloons()[i] + " " + p.getBalloons()[i].GetInstanceID());
             }
@@ -94,6 +99,7 @@ public class Game : MonoBehaviour
         Player p = getPlayer(balloon);
             if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon) && p.removeBalloon(balloon, station))
             {
+                SingletonScript.Instance.stationColour(station, "yellow");
                 Debug.Log("entering removeBalloon if");
                 p.removeDeliveredBalloon(station);
                 Debug.Log("Balloon " + balloon + " removed from the station " + station);
@@ -117,27 +123,6 @@ public class Game : MonoBehaviour
             Debug.Log("not a match");
             return;
         }
-
-        /*
-        foreach(Player p in players){
-            if(p.getDeliveredBalloons() is null){
-                Debug.Log("Not all the stations are occupied by a balloon! Match not possible");
-                return;
-            }
-            matrix.Add(p.getDeliveredBalloons());
-        }
-
-        for(int i=0; i<matrix.Count-1; i++){  // Iterate thru columns
-            for(int j=0; j<matrix[i].Count; j++){  // Iterate thru rows
-                Material mat1 = matrix[j][i].GetComponent<Renderer>().material;
-                Material mat2 = matrix[j][i+1].GetComponent<Renderer>().material;
-                Debug.Log(mat1 + " - " + mat2);
-                if(mat1 != mat2){  // Material of the balloons must be the same.
-                    Debug.Log("Not a match!");
-                    return;
-                }
-            }
-        }*/
         Debug.Log("Match!");
     }
 
@@ -155,9 +140,9 @@ public class Game : MonoBehaviour
 
     private bool getLists()
     {
-        Player p0 = players[0];
-        Player p1 = players[1];
-        
+
+        bool match = true;
+
         for (int i = 0; i < 6; i++)
         {
             if (p0.getBalloon(p0.getStation(i)).GetComponent<Renderer>().material.name != p1.getBalloon(p1.getStation(i)).GetComponent<Renderer>().material.name || p0.getBalloon(p0.getStation(i)) == null)
@@ -165,132 +150,31 @@ public class Game : MonoBehaviour
                 Debug.Log("error on station: " + p0.getStation(i));
                 Debug.Log(p0.getBalloon(p0.getStation(i)).GetComponent<Renderer>().material);
                 Debug.Log(p1.getBalloon(p1.getStation(i)).GetComponent<Renderer>().material);
+                match = false;
+            } else
+            {
+                SingletonScript.Instance.stationColour(p0.getStation(i), "green");
+                SingletonScript.Instance.stationColour(p1.getStation(i), "green");
+
+            }
+        }
+
+        return match;
+    }
+
+    public bool canMatch()
+    {
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (p0.getBalloon(p0.getStation(i)) == null || p1.getBalloon(p1.getStation(i)) == null)
+            {
                 return false;
             }
         }
 
         return true;
+
     }
 
-
-
-
-
-
-
-    // public void addBalloon_old(bool position, Material mat, GameObject station) // true = right, false = left
-    // {
-    //     Debug.Log(mat.name);
-    //     int stationIndex = returnStationIndex(station);
-    //     int color = returnColor(mat);
-
-        
-    //     if (position) {
-    //         if (deliveredBalloons_R[stationIndex] == 11) // se la stazione non e' gia' occupata entra nell'if
-    //         {
-    //             //Debug.Log(mat.name);
-    //             deliveredBalloons_R[stationIndex] = color;
-    //             Debug.Log("aggiunto palloncino di colore " + mat.name + " in posizione " + (stationIndex + 1));
-    //         }
-    //     } else {
-    //         if (deliveredBalloons_L[stationIndex] == 11) // se la stazione non e' gia' occupata entra nell'if
-    //         {
-    //             //Debug.Log(deliveredBalloons_L.Length);
-    //             deliveredBalloons_L[stationIndex] = color;//mat.name;
-    //             Debug.Log("aggiunto palloncino di colore " + mat.name + " in posizione " + (stationIndex + 1));
-    //         }
-    //     }
-        
-    // }
-
-    // public void removeBalloon_old(bool position, Material mat, GameObject station)
-    // {
-    //     int stationIndex = returnStationIndex(station);
-    //     int color = returnColor(mat);
-
-    //     if (position) {
-    //         deliveredBalloons_R[color] = 11; // ora libero
-    //         Debug.Log("rimosso palloncino di colore " + mat.name + " in posizione " + (stationIndex + 1));
-    //     }
-    //     else {
-    //         deliveredBalloons_L[color] = 11; // ora libero
-    //         Debug.Log("rimosso palloncino di colore " + mat.name + " in posizione " + (stationIndex + 1));
-    //         Debug.Log(deliveredBalloons_L[color]);
-    //     }
-
-    // }
-
-    // public void performMatch_old()
-    // {
-    //     // Itera per tutti gli elementi degli array deliveredBalloons, che in ogni posizione (stazione) contengono gli indici relativi ai colori
-    //     for (int i = 0; i < 6; i++)
-    //     {
-    //         if (deliveredBalloons_L[i] != deliveredBalloons_R[i] || deliveredBalloons_L[i] == 11 || deliveredBalloons_R[i] == 11) // valori devono essere uguali e nessuna delle due stazioni vuota
-    //         {
-    //             Debug.Log("not a match");
-
-    //             // Da implementare il ritorno dei palloncini ai posti di partenza
-
-    //             return;
-    //         }
-    //     }
-
-    //     Debug.Log("match!");
-    //     return;
-    // }
-
-    // private int returnStationIndex(GameObject station)
-    // {
-    //     if (station.name == "Balloon_station_1" || station.name == "Balloon_station_1_R")
-    //     {
-    //         return 0;
-    //     } else if (station.name == "Balloon_station_2" || station.name == "Balloon_station_2_R")
-    //     {
-    //         return 1;
-    //     }
-    //     else if (station.name == "Balloon_station_3" || station.name == "Balloon_station_3_R")
-    //     {
-    //         return 2;
-    //     }
-    //     else if (station.name == "Balloon_station_4" || station.name == "Balloon_station_4_R")
-    //     {
-    //         return 3;
-    //     }
-    //     else if (station.name == "Balloon_station_5" || station.name == "Balloon_station_5_R")
-    //     {
-    //         return 4;
-    //     }
-    //     else if (station.name == "Balloon_station_6" || station.name == "Balloon_station_6_R")
-    //     {
-    //         return 5;
-    //     } else
-    //     {
-    //         return 0;
-    //     }
-
-    // }
-
-    // private int returnColor(Material mat)
-    // {
-    //     switch(mat.name)
-    //     {
-    //         case "blue":
-    //             return (int)colors.blue;
-    //         case "green":
-    //             return (int)colors.green;
-    //         case "lightblue":
-    //             return (int)colors.lightblue;
-    //         case "orange":
-    //             return (int)colors.orange;
-    //         case "pink":
-    //             return (int)colors.pink;
-    //         case "purple (Instance)":
-    //             return (int)colors.purple;
-    //         default:
-    //             Debug.Log("error: no color");
-    //             return 40; // costante simbolica
-
-    //     }
-
-    // }
 }

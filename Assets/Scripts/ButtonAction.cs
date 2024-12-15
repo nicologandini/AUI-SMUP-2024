@@ -6,6 +6,13 @@ public class ButtonAction : MonoBehaviour
     public void OnButtonAction()
     {
         print("Ho premuto il pulsante");
-        GameInstance.performMatch();
+        if (GameInstance.canMatch())
+        {
+            GameInstance.performMatch();
+        } else
+        {
+            Debug.Log("There are still empty stations!");
+        }
     }
+
 }

@@ -7,10 +7,10 @@ public class SingletonScript : MonoBehaviour
     // private string plateAv = "Balloon_station_plate_av";
     // private string plateOk = "Balloon_station_plate_ok";
     // private string plateOcc = "Balloon_station_plate_occ";
-	private string plate = "Balloon_station_plate";
-    
+    private string plate = "Balloon_station_plate";
+
     public static SingletonScript Instance;
-    
+
     void Awake()
     {
         Instance = this;
@@ -21,7 +21,13 @@ public class SingletonScript : MonoBehaviour
         Transform child = station.transform.Find(plate);
         child.gameObject.GetComponent<Renderer>().material = Resources.Load(mat, typeof(Material)) as Material;
     }
-    
+
+    public string getStationColor(GameObject station) {
+
+        Transform child = station.transform.Find(plate);
+        return child.gameObject.GetComponent<Renderer>().material.name;
+    }
+
     // public void stationAv(GameObject station)
     // {
     //     Transform childAv = station.transform.Find(plateAv);
