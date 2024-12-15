@@ -21,7 +21,9 @@ public class Console_UI : MonoBehaviour
     }
 
 
-
+    public void ClearLog()  {
+        consoleText.text = "";
+    }
 
     public void ConsolePrint(string text) {
         Debug.Log(text);
