@@ -10866,73 +10866,6 @@ MonoBehaviour:
   m_SnapCollider: {fileID: 1069081911}
   m_DisableSnapColliderWhenSelected: 0
   m_SnapToCollider: {fileID: 1291399509}
---- !u!1 &1070270700
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1070270703}
-  - component: {fileID: 1070270702}
-  - component: {fileID: 1070270701}
-  m_Layer: 0
-  m_Name: SendTest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1070270701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070270700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c81a9e71cf7a9d47a35f9a9e4a365a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1070270702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070270700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 1
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!4 &1070270703
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070270700}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1072584011
 GameObject:
   m_ObjectHideFlags: 0
@@ -18240,6 +18173,8 @@ GameObject:
   - component: {fileID: 1645648873}
   - component: {fileID: 1645648874}
   - component: {fileID: 1645648875}
+  - component: {fileID: 1645648876}
+  - component: {fileID: 1645648877}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -18269,7 +18204,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1645648871}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ef3cb45a9b034448a8f3577887f4b62, type: 3}
   m_Name: 
@@ -18314,6 +18249,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b80ac9c95c84d13b3fc8a14cbbe85f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1645648876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645648871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 389322ed0ff39e4469c8695638c05d74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stationsPlayer:
+  - {fileID: 800090558}
+  - {fileID: 806431881}
+  - {fileID: 1036972240}
+  - {fileID: 1405154571}
+  - {fileID: 672147497}
+  - {fileID: 1410695400}
+  balloonsPlayer:
+  - {fileID: 1602055374}
+  - {fileID: 1940219862}
+  - {fileID: 352837042}
+  - {fileID: 941998334}
+  - {fileID: 1220319517}
+  - {fileID: 1260760104}
+--- !u!114 &1645648877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645648871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &1650675301
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24045,4 +24028,3 @@ SceneRoots:
   - {fileID: 1861699962}
   - {fileID: 1407271946}
   - {fileID: 1065673107}
-  - {fileID: 1070270703}

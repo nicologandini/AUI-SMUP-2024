@@ -81,6 +81,12 @@ namespace SMUP.GameLogic {
             return false;
         }
 
+        public string GetBalloonColorName(GameObject balloon) {
+            if (balloon == null) { return "NULL"; }
+
+            return balloon.GetComponent<Renderer>().material.name;
+        }
+
         public GameObject getBalloon(GameObject station)
         {
             return (GameObject)deliveredItems[station];
@@ -89,6 +95,18 @@ namespace SMUP.GameLogic {
         public GameObject getStation(int index)
         {
             return stations[index];
+        }
+
+        public string GetBalloonsColors() {
+            string balloonsColors = "";
+            Console_UI.Instance.ConsolePrint("Passing colors");
+
+            for (int i = 0; i < 6; i++) {
+                Console_UI.Instance.ConsolePrint("Color:" + (GetBalloonColorName(getBalloon(getStation(i)))));
+                balloonsColors += (GetBalloonColorName(getBalloon(getStation(i)))) + ",";
+            }
+            
+            return balloonsColors;
         }
     }
 }

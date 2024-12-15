@@ -1,22 +1,16 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Photon.Pun;
 using SMUP.GameLogic;
 using UnityEngine;
 
 public class GameMultiplayer : MonoBehaviour
 {
-    List<Player> players = null;
+    Player player = null;
 
-    [SerializeField]
-    List <GameObject> stationsPlayer1 = null;  // Inputs in Unity
-
-    [SerializeField]
-    List <GameObject> balloonsPlayer1 = null; // Inputs in Unity
-
-    [SerializeField]
-    List <GameObject> stationsPlayer2 = null; // Inputs in Unity
-
-    [SerializeField]
-    List <GameObject> balloonsPlayer2 = null; // Inputs in Unity
+    [SerializeField] List <GameObject> stationsPlayer = null;  // Inputs in Unity
+    [SerializeField] List <GameObject> balloonsPlayer = null; // Inputs in Unity
 
     int balloons_counter = 0;
 
@@ -27,62 +21,41 @@ public class GameMultiplayer : MonoBehaviour
     {
         GameInstance = this;
         
-        if((balloonsPlayer1.Count != balloonsPlayer2.Count) || (stationsPlayer1.Count != stationsPlayer1.Count)){
+        if(stationsPlayer.Count != stationsPlayer.Count){
             Debug.Log("Wrong number of balloons or statios!");
         } else {
-            balloons_counter = balloonsPlayer1.Count;
-        }
-        // deliveredBalloons_L = new List<int> (new int[balloons_counter]);
-        // deliveredBalloons_R = new List<int> (new int[balloons_counter]);
-
-        players = new List<Player>();
-        players.Add(new Player(balloonsPlayer1, stationsPlayer1));
-        players.Add(new Player(balloonsPlayer2, stationsPlayer2));
-
-        foreach(Player p in players){
-            for(int i=0; i<p.getStations().Count; i++) {
-                Debug.Log("Stazione " + p.getStations()[i] + " " + p.getStations()[i].GetInstanceID() + " - " + p.getBalloons()[i] + " " + p.getBalloons()[i].GetInstanceID());
-            }
+            balloons_counter = balloonsPlayer.Count;
         }
 
-        // for (int i = 0; i < balloons_counter; i++)
-        // {
-        //     deliveredBalloons_L[i] = 11; // 11 = libero
-        //     deliveredBalloons_R[i] = 11; //
-        // }
+        player = new Player(balloonsPlayer, stationsPlayer);
+        Player p = player;
 
-		// // Solo per test, poi si può eliminare
-        // foreach (GameObject station in stations_L)
-        // {
-        //     Transform childAv = station.transform.Find(plateAv);
-        //     Transform childOk = station.transform.Find(plateOk);
-        //     Transform childOcc = station.transform.Find(plateOcc);
-        //     Debug.Log("La posizione del plate e': " + childAv.position);
-        //     childAv.gameObject.SetActive(true);
-        //     childOk.gameObject.SetActive(false);
-        //     childOcc.gameObject.SetActive(false);
-        //     // Debug.Log(childAv); Output is name 
-        // }
-        
-        //GameObject s1 = GameObject.Find("Balloon_station_1");
-        //Transform childTransform = s1.transform.Find("Balloon_station_plate");
-        //Debug.Log("La posizione del plate e': " + childTransform.position);
-        //childTransform.gameObject.SetActive(false);
+        for(int i=0; i<p.getStations().Count; i++) {
+            Debug.Log("Stazione " + p.getStations()[i] + " " + p.getStations()[i].GetInstanceID() + " - " + p.getBalloons()[i] + " " + p.getBalloons()[i].GetInstanceID());
+        }
+
+        // Pretend to press the button
+        if (!PhotonNetwork.IsMasterClient) {
+            Invoke("RequestMatch", 5f);
+        }
+
+        Console_UI.Instance.ClearLog();
     }
 
     public void addBalloon(GameObject balloon, GameObject station){
         //foreach(Player p in players){
         Player p = getPlayer(balloon);
-            Debug.Log("Sto cercando il palloncino " + balloon + balloon.GetInstanceID() + " e la stazione " + station + station.GetInstanceID() + " nel player ");
-            Debug.Log(p.getStations().Contains(station));
-            Debug.Log(p.getBalloons().Contains(balloon));
-            Debug.Log(p.containsBalloon(station));
-            if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon) && !p.containsBalloon(station)){
-                Debug.Log("Entering addBalloon if");
-                p.addDeliveredBalloon(balloon, station);
-                Debug.Log("Balloon " + p.getBalloon(station) + " added on the station " + station);
-                return;
-            }
+
+        Debug.Log("Sto cercando il palloncino " + balloon + balloon.GetInstanceID() + " e la stazione " + station + station.GetInstanceID() + " nel player ");
+        Debug.Log(p.getStations().Contains(station));
+        Debug.Log(p.getBalloons().Contains(balloon));
+        Debug.Log(p.containsBalloon(station));
+        if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon) && !p.containsBalloon(station)){
+            Debug.Log("Entering addBalloon if");
+            p.addDeliveredBalloon(balloon, station);
+            Debug.Log("Balloon " + p.getBalloon(station) + " added on the station " + station);
+            return;
+        }
         //}
         Debug.Log("Balloon positioned on the wrong station");
         Debug.Log("Situation on " + station + ": " + p.getBalloon(station));
@@ -104,14 +77,29 @@ public class GameMultiplayer : MonoBehaviour
         Debug.Log("Situation on " + station + ": " + p.getBalloon(station));
     }
 
-    public void performMatch(){
+    public void RequestMatch() {
+        Console_UI.Instance.ConsolePrint("Requesting mathc");
+
+        PhotonView photonView = PhotonView.Get(this);
+        photonView.RPC("performMatch", RpcTarget.Others, player.GetBalloonsColors());        
+    }   
+
+    [PunRPC]  
+    private void performMatch(string colorNames){
+        Console_UI.Instance.ConsolePrint("Colors Name: " + colorNames);
+        List<string> colorsList = GetStrings(colorNames);
+
+        foreach (var name in colorsList) {
+            Console_UI.Instance.ConsolePrint("Color List: " + name);
+        }
+        
         List<List<GameObject>> matrix = new List<List<GameObject>>();
-        if(players is null){
+        if(player is null){
             Debug.Log("Players do not exist");
             return;
         }
 
-        if (!getLists())
+        if (!getLists(colorsList))
         {
             Debug.Log("not a match");
             return;
@@ -142,33 +130,34 @@ public class GameMultiplayer : MonoBehaviour
 
     public Player getPlayer(GameObject balloon)
     {
-        foreach(Player p in players)
+        if (player.getBalloons().Contains(balloon))
         {
-            if (p.getBalloons().Contains(balloon))
-            {
-                return p;
-            }
+            return player;
         }
         return null;
     }
 
-    private bool getLists()
+    private bool getLists(List<string> balloonsColors)
     {
-        Player p0 = players[0];
-        Player p1 = players[1];
+        Player p0 = player;
         
         for (int i = 0; i < 6; i++)
         {
-            if (p0.getBalloon(p0.getStation(i)).GetComponent<Renderer>().material.name != p1.getBalloon(p1.getStation(i)).GetComponent<Renderer>().material.name || p0.getBalloon(p0.getStation(i)) == null)
+            if (p0.getBalloon(p0.getStation(i)) == null || p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) != balloonsColors[i] || p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) == "NULL" || balloonsColors[i] == "NULL")
             {
                 Debug.Log("error on station: " + p0.getStation(i));
                 Debug.Log(p0.getBalloon(p0.getStation(i)).GetComponent<Renderer>().material);
-                Debug.Log(p1.getBalloon(p1.getStation(i)).GetComponent<Renderer>().material);
+                Debug.Log(balloonsColors[i]);
                 return false;
             }
         }
 
+        Console_UI.Instance.ConsolePrint("All matches!");
         return true;
+    }
+
+    private List<string> GetStrings(string allColors) {
+        return (allColors.Split(",", StringSplitOptions.RemoveEmptyEntries)).ToList<string>();
     }
 
 
