@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
-using System;
+using SMUP.GameLogic;
 
 public class Game : MonoBehaviour
 {
