@@ -25,8 +25,10 @@ public class Console_UI : MonoBehaviour
         consoleText.text = "";
     }
 
-    public void ConsolePrint(string text) {
+    public void ConsolePrint(string text, int textSize = 20) {
         Debug.Log(text);
+
+        consoleText.fontSize = textSize;
         consoleText.text += (text+"\n");
     }
 }

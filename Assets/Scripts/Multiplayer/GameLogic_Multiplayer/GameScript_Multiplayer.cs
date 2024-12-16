@@ -89,6 +89,7 @@ public class GameMultiplayer : MonoBehaviour
         Console_UI.Instance.ConsolePrint("Colors Name: " + colorNames);
         List<string> colorsList = GetStrings(colorNames);
 
+        Console_UI.Instance.ConsolePrint("Color List Length: " + colorsList.Count);
         foreach (var name in colorsList) {
             Console_UI.Instance.ConsolePrint("Color List: " + name);
         }
@@ -101,7 +102,7 @@ public class GameMultiplayer : MonoBehaviour
 
         if (!getLists(colorsList))
         {
-            Debug.Log("not a match");
+            Console_UI.Instance.ConsolePrint("Not a match!");
             return;
         }
 
@@ -125,7 +126,9 @@ public class GameMultiplayer : MonoBehaviour
                 }
             }
         }*/
-        Debug.Log("Match!");
+
+        PhotonView photonView = PhotonView.Get(this);
+        photonView.RPC("Win", RpcTarget.All);  
     }
 
     public Player getPlayer(GameObject balloon)
@@ -139,25 +142,40 @@ public class GameMultiplayer : MonoBehaviour
 
     private bool getLists(List<string> balloonsColors)
     {
+        Console_UI.Instance.ClearLog();
+
         Player p0 = player;
-        
+        if (p0 == null) {Console_UI.Instance.ConsolePrint("There is no player!");}
+
         for (int i = 0; i < 6; i++)
         {
+            /*
+            Console_UI.Instance.ConsolePrint($"Is balloon {i} null: {p0.getStation(i) == null}");
+            Console_UI.Instance.ConsolePrint($"Have different name {i}: {p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) != balloonsColors[i]}");
+            Console_UI.Instance.ConsolePrint($"Is player balloon NULL {i}: { p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) == "NULL"}");
+            Console_UI.Instance.ConsolePrint($"Is passed balloon NULL {i}: {balloonsColors[i] == "NULL"}");
+            */
+
             if (p0.getBalloon(p0.getStation(i)) == null || p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) != balloonsColors[i] || p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) == "NULL" || balloonsColors[i] == "NULL")
             {
-                Debug.Log("error on station: " + p0.getStation(i));
-                Debug.Log(p0.getBalloon(p0.getStation(i)).GetComponent<Renderer>().material);
-                Debug.Log(balloonsColors[i]);
+                Console_UI.Instance.ConsolePrint("error on station: " + p0.getStation(i));
+                Console_UI.Instance.ConsolePrint(p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))));
+                Console_UI.Instance.ConsolePrint(balloonsColors[i]);
                 return false;
             }
         }
 
-        Console_UI.Instance.ConsolePrint("All matches!");
         return true;
     }
 
     private List<string> GetStrings(string allColors) {
         return (allColors.Split(",", StringSplitOptions.RemoveEmptyEntries)).ToList<string>();
+    }
+
+    [PunRPC]
+    private void Win() {
+        Console_UI.Instance.ClearLog();
+        Console_UI.Instance.ConsolePrint("All matches!", 40);
     }
 
 

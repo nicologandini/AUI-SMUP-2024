@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text.RegularExpressions;
-using static Game;
+using static GameMultiplayer;       //Changed to multiplayer
 
 public class ColliderDetection : MonoBehaviour
 {
