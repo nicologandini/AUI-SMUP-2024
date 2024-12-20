@@ -53,6 +53,9 @@ namespace SMUP.Multiplayer
         {
             progressLabel.SetActive(false);
             controlPanel.SetActive(true);   
+
+            // Invoke Connect after 1 second instead of pressing the connect button
+            Invoke("Connect", 1f);
         }
     #endregion
 
