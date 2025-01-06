@@ -46,6 +46,9 @@ MonoBehaviour:
   - Win
   - correctStation
   - wrongStation
+  - changeStationColor
+  - changeStationColorGrey
+  - changeStationColorYellow
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

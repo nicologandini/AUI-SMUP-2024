@@ -19,6 +19,7 @@ public class ColliderDetection : MonoBehaviour
             if (SingletonScript.Instance.getStationColor(this.transform.parent.gameObject) == "yellow (Instance)")
             {
                 SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "grey");
+				GameInstance.changeOtherStation(this.transform.parent.gameObject, false);
             }
             
             GameInstance.addBalloon(collidingObject, this.transform.parent.gameObject);

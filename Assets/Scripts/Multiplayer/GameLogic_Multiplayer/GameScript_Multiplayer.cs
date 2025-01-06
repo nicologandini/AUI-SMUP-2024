@@ -11,6 +11,7 @@ public class GameMultiplayer : MonoBehaviour
 
     [SerializeField] List <GameObject> stationsPlayer = null;  // Inputs in Unity
     [SerializeField] List <GameObject> balloonsPlayer = null; // Inputs in Unity
+	[SerializeField] List <GameObject> otherStationsPlayer = null; // Inputs in Unity
 
     int balloons_counter = 0;
 
@@ -30,7 +31,7 @@ public class GameMultiplayer : MonoBehaviour
             balloons_counter = balloonsPlayer.Count;
         }
 
-        player = new Player(balloonsPlayer, stationsPlayer);
+        player = new Player(balloonsPlayer, stationsPlayer, otherStationsPlayer);
         Player p = player;
 
         for(int i=0; i<p.getStations().Count; i++) {
@@ -39,7 +40,7 @@ public class GameMultiplayer : MonoBehaviour
 
         // Pretend to press the button
         if (!PhotonNetwork.IsMasterClient) {
-            Invoke("RequestMatch", 5f);
+            //Invoke("RequestMatch", 5f);
         }
 
 		mainCamera = Camera.main;
@@ -184,6 +185,9 @@ public class GameMultiplayer : MonoBehaviour
 
             if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon) && p.removeBalloon(balloon, station))
             {
+				//int index = p.getStationIndex(station);
+				//SingletonScript.Instance.stationColour(p.getOtherStation(index), "yellow");
+				changeOtherStation(station, true);
                 SingletonScript.Instance.stationColour(station, "yellow");
                 Debug.Log("entering removeBalloon if");
                 p.removeDeliveredBalloon(station);
@@ -283,11 +287,13 @@ public class GameMultiplayer : MonoBehaviour
                 Console_UI.Instance.ConsolePrint("error on station: " + p0.getStation(i));
                 Console_UI.Instance.ConsolePrint(p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))));
                 Console_UI.Instance.ConsolePrint(balloonsColors[i]);
+				SingletonScript.Instance.stationColour(p0.getOtherStation(i), "grey");
                 SingletonScript.Instance.stationColour(p0.getStation(i), "grey");
                 photonView.RPC("wrongStation", RpcTarget.Others, i);
                 match = false;
             } else
             {
+				SingletonScript.Instance.stationColour(p0.getOtherStation(i), "green");
                 SingletonScript.Instance.stationColour(p0.getStation(i), "green");
                 photonView.RPC("correctStation", RpcTarget.Others, i);
             }
@@ -310,6 +316,7 @@ public class GameMultiplayer : MonoBehaviour
     private void correctStation(int i)
     {
         Player p0 = player;
+		SingletonScript.Instance.stationColour(p0.getOtherStation(i), "green");
         SingletonScript.Instance.stationColour(p0.getStation(i), "green");
     }
 
@@ -317,9 +324,36 @@ public class GameMultiplayer : MonoBehaviour
     private void wrongStation(int i)
     {
         Player p0 = player;
+		SingletonScript.Instance.stationColour(p0.getOtherStation(i), "grey");
         SingletonScript.Instance.stationColour(p0.getStation(i), "grey");
     }
+	
+	[PunRPC]
+	private void changeStationColorGrey(int i)
+	{
+		Player p0 = player;
+		SingletonScript.Instance.stationColour(p0.getOtherStation(i), "grey");
+	}
+	
+	[PunRPC]
+	private void changeStationColorYellow(int i)
+	{
+		Player p0 = player;
+		SingletonScript.Instance.stationColour(p0.getOtherStation(i), "yellow");
+	}
 
+	public void changeOtherStation(GameObject station, bool free) {
+		
+		PhotonView photonView = PhotonView.Get(this);
+		Player p0 = player;
+		int index = p0.getStationIndex(station);
+		
+		if (free == false) {
+			photonView.RPC("changeStationColorGrey", RpcTarget.Others, index); // non libero
+		} else {
+			photonView.RPC("changeStationColorYellow", RpcTarget.Others, index); // libero
+		}
+	}
 
 
 

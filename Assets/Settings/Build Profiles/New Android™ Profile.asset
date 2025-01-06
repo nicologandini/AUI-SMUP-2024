@@ -20,21 +20,19 @@ MonoBehaviour:
     rid: 4189728887520362497
   m_OverrideGlobalSceneList: 1
   m_Scenes:
-  - m_enabled: 0
+  - m_enabled: 1
     m_path: Assets/Scenes/Multiplayer/Lobby.unity
-  - m_enabled: 0
+  - m_enabled: 1
     m_path: Assets/Scenes/Multiplayer/WaitingRoom.unity
-  - m_enabled: 0
+  - m_enabled: 1
     m_path: Assets/Scenes/OutsideScene.unity
   - m_enabled: 0
     m_path: Assets/Scenes/In_old.unity
   - m_enabled: 0
-    m_path: Assets/Scenes/outside passthrough.unity
-  - m_enabled: 0
     m_path: Assets/Scenes/passthru test.unity
   - m_enabled: 0
     m_path: Assets/Scenes/passthru building block.unity
-  - m_enabled: 1
+  - m_enabled: 0
     m_path: Assets/Scenes/outside passthrough2.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
