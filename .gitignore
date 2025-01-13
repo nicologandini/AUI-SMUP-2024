@@ -27,6 +27,9 @@
 .vs/
 .vscode/
 
+# Rider JetBrains
+.idea/
+
 # Gradle cache directory
 .gradle/
 
@@ -71,6 +74,10 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Build infos
+/SMUP-XR_BurstDebugInformation_DoNotShip
+/.utmp
 
 
 # Mac files
