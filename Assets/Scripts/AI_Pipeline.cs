@@ -29,9 +29,10 @@ namespace AI_Pipeline {
         void Start()
         {
             //startRecoButton.onClick.AddListener(() => StartSpeechPipeline());
+            print($"Starting AI_Pipeline");
             canTalk = true;
             actionBinding = inputManager.actionAssets[0].actionMaps[0].actions[18];
-            print(actionBinding);
+            print($"actionBinding: {actionBinding}");
         }
 
         void Update() {

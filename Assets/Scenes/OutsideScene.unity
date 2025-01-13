@@ -8051,6 +8051,125 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 486386, guid: 29fa604a71af93f4ea5a436c6de8cb99, type: 3}
   m_PrefabInstance: {fileID: 812691804}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &817084770
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 817084772}
+  - component: {fileID: 817084771}
+  - component: {fileID: 817084775}
+  - component: {fileID: 817084774}
+  - component: {fileID: 817084773}
+  - component: {fileID: 817084776}
+  m_Layer: 0
+  m_Name: AI_pipeline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &817084771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817084770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c68973dd08c654290f1a95873481f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sst: {fileID: 817084775}
+  tts: {fileID: 817084774}
+  ai_Conversation: {fileID: 817084773}
+  inputManager: {fileID: 817084776}
+  speechTimeOut: 60
+--- !u!4 &817084772
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817084770}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &817084773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817084770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b038055780dedc74aae0447ab3522c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  configuration: {fileID: 11400000, guid: 8b426fd4d8f82a240b01e04da80690c6, type: 2}
+  systemPrompt: "Sei un assistente virtuale che aiuta gli utenti a risolvere un gioco.\r\nL'utente
+    non conosce il gioco.\r\nNon devi mai rivolgerti agli utenti come \"utente1\"
+    o \"utenteX\" o qualcosa di simile.\r\nDevi rispondere in modo semplice e gioioso.\r\nOgni
+    utente pu\xF2 compiere un azione o fare una richiesta: le richieste sono specificate
+    come utenteX dice:\"\", invece le azioni sono specificate come utenteX esegue:
+    **\r\nSe un utente \xE8 in difficolt\xE0 e chiede aiuto devi rispondere cercando
+    di aiutare l'utente.\r\nQuando si presente un nuovo utente devi  chiedere il
+    suo nome e successivamente rivolgerti al utente utilizzando il suo nome.\r\n\rIl
+    gioco consiste nel spostare degli oggetti fino a dei contenitori, gli oggetti
+    devono essere posizionati sui contenitori nella posizione giusta, se un oggetto
+    \xE8 posizionato su un contenitore allora il contenitore si illumina, il contenitore
+    si illumina di giallo se un oggetto \xE8 posizionato sopra ma in posizione sbagliata,
+    invece si illumina di verde se in posizione giusta."
+--- !u!114 &817084774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817084770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4b264c3f9ee88349971f094b5e1b77c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speechSettings_SO: {fileID: 11400000, guid: 93b260207d3dfed47a01b3cec1831299, type: 2}
+--- !u!114 &817084775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817084770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b386a0ec00bfb44189eca0fdaaf17ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speechSettings_SO: {fileID: 11400000, guid: 93b260207d3dfed47a01b3cec1831299, type: 2}
+--- !u!114 &817084776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817084770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 017c5e3933235514c9520e1dace2a4b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ActionAssets:
+  - {fileID: -944628639613478452, guid: da2b439d1a2de5c46a4f428f8cf4fe19, type: 3}
 --- !u!1001 &821553060
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24201,3 +24320,4 @@ SceneRoots:
   - {fileID: 1407271946}
   - {fileID: 1065673107}
   - {fileID: 163214887}
+  - {fileID: 817084772}
