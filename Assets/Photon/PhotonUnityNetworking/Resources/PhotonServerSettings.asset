@@ -44,8 +44,11 @@ MonoBehaviour:
   - SendBalloons
   - performMatch
   - Win
-  - RequestAnswered
-  - SetRequestFlag
+  - correctStation
+  - wrongStation
+  - changeStationColor
+  - changeStationColorGrey
+  - changeStationColorYellow
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

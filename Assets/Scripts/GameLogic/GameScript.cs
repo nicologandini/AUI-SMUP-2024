@@ -17,6 +17,9 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     List <GameObject> balloonsPlayer2 = null; // Inputs in Unity
+	
+	[SerializeField]
+    List <GameObject> otherStations = null; // Inputs in Unity
 
     int balloons_counter = 0;
 
@@ -36,8 +39,8 @@ public class Game : MonoBehaviour
         // deliveredBalloons_R = new List<int> (new int[balloons_counter]);
 
         players = new List<Player>();
-        players.Add(new Player(balloonsPlayer1, stationsPlayer1));
-        players.Add(new Player(balloonsPlayer2, stationsPlayer2));
+        players.Add(new Player(balloonsPlayer1, stationsPlayer1, otherStations));
+        players.Add(new Player(balloonsPlayer2, stationsPlayer2, otherStations));
 
         foreach(Player p in players){
             for(int i=0; i<p.getStations().Count; i++) {

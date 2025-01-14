@@ -21,7 +21,14 @@ public class SingletonScript : MonoBehaviour
         Transform child = station.transform.Find(plate);
         child.gameObject.GetComponent<Renderer>().material = Resources.Load(mat, typeof(Material)) as Material;
     }
-    
+
+    public string getStationColor(GameObject station)
+    {
+
+        Transform child = station.transform.Find(plate);
+        return child.gameObject.GetComponent<Renderer>().material.name;
+    }
+
     // public void stationAv(GameObject station)
     // {
     //     Transform childAv = station.transform.Find(plateAv);

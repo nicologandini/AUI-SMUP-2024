@@ -7,11 +7,13 @@ namespace SMUP.GameLogic {
     public class Player{
         List<GameObject> stations;
         List<GameObject> balloons;
+		List<GameObject> otherStations;
         Hashtable deliveredItems;  // key: station, value: balloon
 
-        public Player(List<GameObject> balloons, List<GameObject> stations){
+        public Player(List<GameObject> balloons, List<GameObject> stations, List<GameObject> otherStations){
             this.balloons = balloons;
             this.stations = stations;
+			this.otherStations = otherStations;
             this.deliveredItems = new Hashtable();
             foreach(GameObject s in stations){
                 this.deliveredItems.Add(s, null);
@@ -96,6 +98,11 @@ namespace SMUP.GameLogic {
         {
             return stations[index];
         }
+		
+		public GameObject getOtherStation(int index) {
+			
+			return otherStations[index];
+		}
 
         public string GetBalloonsColors() {
             string balloonsColors = "";
@@ -108,5 +115,14 @@ namespace SMUP.GameLogic {
             
             return balloonsColors;
         }
+		
+		public int getStationIndex(GameObject station) {
+			for (int i = 0; i < 6; i++) {
+				if (stations[i] == station) {
+					return i;
+				}
+			}
+			return 0;
+		}
     }
 }

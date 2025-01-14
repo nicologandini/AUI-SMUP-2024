@@ -16,7 +16,11 @@ public class ColliderDetection : MonoBehaviour
             collidingObject = c.gameObject;
             Debug.Log("Collision on " + this.transform.parent.gameObject + " by " + collidingObject);  //.getInstanceID()
             // Change the plate colour
-            SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "grey");
+            if (SingletonScript.Instance.getStationColor(this.transform.parent.gameObject) == "yellow (Instance)")
+            {
+                SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "grey");
+				GameInstance.changeOtherStation(this.transform.parent.gameObject, false);
+            }
             
             GameInstance.addBalloon(collidingObject, this.transform.parent.gameObject);
         }
@@ -27,8 +31,8 @@ public class ColliderDetection : MonoBehaviour
         Debug.Log("Exit event from the trigger");
         if (c.tag == "SortingObject")
         {
-			Debug.Log("Free Young Thug");
-            SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "yellow");
+            collidingObject = c.gameObject;
+            Debug.Log("Free Young Thug");
 
             GameInstance.removeBalloon(collidingObject, this.transform.parent.gameObject);
             collidingObject = null;
