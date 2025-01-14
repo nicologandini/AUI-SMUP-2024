@@ -1238,11 +1238,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   masterObjects:
-  - {fileID: 1854155230}
   - {fileID: 765838266}
   - {fileID: 2047382211}
   guestObjects:
-  - {fileID: 1356277136}
   - {fileID: 1860797953}
   - {fileID: 1407271947}
 --- !u!4 &163214887
@@ -18366,6 +18364,7 @@ GameObject:
   - component: {fileID: 1645648877}
   - component: {fileID: 1645648878}
   - component: {fileID: 1645648879}
+  - component: {fileID: 1645648880}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -18540,6 +18539,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countdownTimer: 10
   gameMultiplayer: {fileID: 1645648876}
+--- !u!114 &1645648880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645648871}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6976f55b11c55144db255ac14f97170b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tts: {fileID: 817084774}
 --- !u!1001 &1650675301
 PrefabInstance:
   m_ObjectHideFlags: 0
