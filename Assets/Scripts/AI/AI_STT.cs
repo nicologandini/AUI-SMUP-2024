@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class AI_STT : MonoBehaviour

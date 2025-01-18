@@ -7,7 +7,9 @@ public class ButtonAction : MonoBehaviour
     {
         print("Ho premuto il pulsante");
         
-        GameInstance.RequestMatch();//GameInstance.performMatch();
+        /* OK code
+        GameInstance.RequestMatch();            //GameInstance.performMatch();
+        */
     }
 
     public void PassthroughAction()
@@ -18,6 +20,9 @@ public class ButtonAction : MonoBehaviour
         GameObject passthrough = camera.transform.GetChild(0).gameObject;
         passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
         */
+
+        /* Ok code
         GameInstance.passthroughAction();
+        */
     }
 }

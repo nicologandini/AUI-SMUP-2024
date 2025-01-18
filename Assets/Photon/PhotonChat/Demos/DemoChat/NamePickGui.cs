@@ -36,10 +36,12 @@ namespace Photon.Chat.Demo
         // new UI will fire "EndEdit" event also when loosing focus. So check "enter" key and only then StartChat.
         public void EndEditOnEnter()
         {
+            /* ok code
             if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
             {
                 this.StartChat();
             }
+            */
         }
 
         public void StartChat()

@@ -162,7 +162,7 @@
                     "name": "Z Constraint",
                     "type": "Button",
                     "id": "d3e9308c-6f8c-46f7-bb6f-14422c345983",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -390,6 +390,17 @@
                     "name": "",
                     "id": "0fa0d566-1e07-4e17-9b14-3e8fce69ec26",
                     "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X Constraint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3781d4b-f511-42bd-8bd9-0ec9409a1af3",
+                    "path": "<XRController>{RightHand}/secondaryButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

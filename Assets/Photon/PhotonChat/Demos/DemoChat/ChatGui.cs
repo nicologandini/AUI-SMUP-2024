@@ -205,11 +205,13 @@ namespace Photon.Chat.Demo
 
         public void OnEnterSend()
         {
+            /*
             if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
             {
                 this.SendChatMessage(this.InputFieldChat.text);
                 this.InputFieldChat.text = "";
             }
+            */
         }
 
         public void OnClickSend()

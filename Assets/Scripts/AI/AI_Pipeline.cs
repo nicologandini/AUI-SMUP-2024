@@ -9,7 +9,7 @@ namespace AI_Pipeline {
     public class AI_Pipeline : MonoBehaviour
     {
         [Header("Components")]
-        [SerializeField] private AI_STT_continuous sst;
+        [SerializeField] private AI_STT_Android sst;
         [SerializeField] private AI_TTS tts;
         [SerializeField] private AI_Conversation ai_Conversation;
 
@@ -31,7 +31,7 @@ namespace AI_Pipeline {
             //startRecoButton.onClick.AddListener(() => StartSpeechPipeline());
             print($"Starting AI_Pipeline");
             canTalk = true;
-            actionBinding = inputManager.actionAssets[0].actionMaps[0].actions[18];
+            actionBinding = inputManager.actionAssets[0].FindActionMap("Main").FindAction("X Constraint");          //actionMaps[0].actions[18];
             print($"actionBinding: {actionBinding}");
         }
 

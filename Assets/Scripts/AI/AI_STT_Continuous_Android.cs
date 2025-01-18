@@ -6,10 +6,10 @@ using Microsoft.CognitiveServices.Speech;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
+using UnityEngine.Android;
 
-public class AI_STT_continuous : MonoBehaviour {
+public class AI_STT_Continuous_Android : MonoBehaviour {
     [SerializeField] private SpeechSettings_SO speechSettings_SO;
-
 
     private SpeechRecognizer recognizer;
     private bool isRecognizing = false; // Stato del riconoscimento
@@ -17,19 +17,30 @@ public class AI_STT_continuous : MonoBehaviour {
     private bool canReturn = false;
     private UnityEngine.InputSystem.InputAction actionBinding;
 
-
     private object threadLocker = new object();
     private string message = "";
     private bool micPermissionGranted = false;
 
-
     void Start() {
+        RequestMicrophonePermission();
         InitializeSpeechRecognizer();
     }
 
+    private void RequestMicrophonePermission() {
+        // Richiede il permesso per il microfono su Android
+        if (Application.platform == RuntimePlatform.Android && !Permission.HasUserAuthorizedPermission(Permission.Microphone)) {
+            Permission.RequestUserPermission(Permission.Microphone);
+        }
+
+        micPermissionGranted = Permission.HasUserAuthorizedPermission(Permission.Microphone);
+
+        if (!micPermissionGranted) {
+            Debug.LogError("Permesso per il microfono non concesso. L'app non può eseguire il riconoscimento vocale.");
+        }
+    }
 
     public async Task<string> SpeechToText(UnityEngine.InputSystem.InputAction actionBinding, float timeout = 30f) {
-        if (!isRecognizing) {
+        if (!isRecognizing && micPermissionGranted) {
             InitializeSpeechRecognizer();
             SetStopCallback(actionBinding);
             string text = await StartSpeechRecognition(timeout);
@@ -37,20 +48,20 @@ public class AI_STT_continuous : MonoBehaviour {
 
             return text;
         } else {
+            Debug.LogError("Riconoscimento già in corso o permesso microfono non concesso.");
             return "";
         }
     }
 
-
     private void InitializeSpeechRecognizer() {
         SpeechConfig config = SpeechConfig.FromSubscription(speechSettings_SO.speechAPIKey, speechSettings_SO.region);
         config.SpeechRecognitionLanguage = speechSettings_SO.recognitionLanguage;
-        config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "1000");         //ms di delay prima di dividere le frasi
+        config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "1000"); // ms di delay prima di dividere le frasi
         recognizer = new SpeechRecognizer(config);
 
-        // Evens:
+        // Eventi:
         recognizer.Recognizing += (s, e) => {
-            //Debug.Log($"Parola rilevata: {e.Result.Text}");
+            Debug.Log($"Parola rilevata: {e.Result.Text}");
         };
 
         recognizer.Recognized += (s, e) => {
@@ -64,12 +75,13 @@ public class AI_STT_continuous : MonoBehaviour {
 
         recognizer.SessionStopped += (s, e) => {
             lock (threadLocker) {
+                Debug.Log("Sessione terminata.");
                 canReturn = true;
             }
         };
 
         recognizer.Canceled += (s, e) => {
-            //Debug.LogError($"Errore nel riconoscimento: {e.ErrorDetails}");
+            Debug.LogError($"Errore nel riconoscimento: {e.ErrorDetails}");
             canReturn = true;
         };
     }
@@ -91,14 +103,13 @@ public class AI_STT_continuous : MonoBehaviour {
         RemoveStopCallback();
     }
 
-
     private async Task<string> StartSpeechRecognition(float timeout = 30f) {
         isRecognizing = true;
         stopRequested = false;
         canReturn = false;
         message = "";
 
-        //Debug.Log("Riconoscimento vocale avviato...");
+        Debug.Log("Riconoscimento vocale avviato...");
         await recognizer.StartContinuousRecognitionAsync();
         await WaitUntilTimeoutOrStopRequested(timeout);
 
@@ -106,7 +117,6 @@ public class AI_STT_continuous : MonoBehaviour {
         await WaitToReturn();
 
         lock (threadLocker) {
-            //print($"Message: {message}");
             return message;
         }
     }
@@ -114,13 +124,12 @@ public class AI_STT_continuous : MonoBehaviour {
     private async void StopSpeechRecognition() {
         if (!isRecognizing) return;
 
-        //Debug.Log("Riconoscimento vocale interrotto...");
+        Debug.Log("Riconoscimento vocale interrotto...");
         stopRequested = true;
         await recognizer.StopContinuousRecognitionAsync();
 
         isRecognizing = false;
     }
-
 
     private async Task WaitUntilTimeoutOrStopRequested(float timeout) {
         float elapsedTime = 0f;
@@ -136,7 +145,6 @@ public class AI_STT_continuous : MonoBehaviour {
             await Task.Delay(100); // Aspetta 100ms prima di controllare di nuovo
         }
     }
-
 
     private void OnDestroy() {
         ReleaseElements();
