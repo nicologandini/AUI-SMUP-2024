@@ -19161,6 +19161,8 @@ GameObject:
   - component: {fileID: 1479574572}
   - component: {fileID: 1479574578}
   - component: {fileID: 1479574579}
+  - component: {fileID: 1479574581}
+  - component: {fileID: 1479574582}
   m_Layer: 0
   m_Name: AI_Pipeline
   m_TagString: Untagged
@@ -19222,18 +19224,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configuration: {fileID: 11400000, guid: 8b426fd4d8f82a240b01e04da80690c6, type: 2}
   systemPrompt: "Sei un assistente virtuale che aiuta gli utenti a risolvere un gioco.\r\nL'utente
-    non conosce il gioco.\r\nNon devi mai rivolgerti agli utenti come \"utente1\"
-    o \"utenteX\" o qualcosa di simile.\r\nDevi rispondere in modo semplice e gioioso.\r\nOgni
+    non conosce il gioco.\r\r\nDevi rispondere in modo semplice e gioioso.\r\nOgni
     utente pu\xF2 compiere un azione o fare una richiesta: le richieste sono specificate
     come utenteX dice:\"\", invece le azioni sono specificate come utenteX esegue:
     **\r\nSe un utente \xE8 in difficolt\xE0 e chiede aiuto devi rispondere cercando
-    di aiutare l'utente.\r\nQuando si presente un nuovo utente devi  chiedere il
-    suo nome e successivamente rivolgerti al utente utilizzando il suo nome.\r\n\rIl
-    gioco consiste nel spostare degli oggetti fino a dei contenitori, gli oggetti
+    di aiutare l'utente.\r\nQuando si presenta un nuovo utente devi chiedere il suo
+    nome e successivamente rivolgerti al utente utilizzando il suo nome.\r\n\rIl
+    gioco consiste nel spostare dei palloncin fino a dei contenitori, i palloncini
     devono essere posizionati sui contenitori nella posizione giusta, se un oggetto
     \xE8 posizionato su un contenitore allora il contenitore si illumina, il contenitore
     si illumina di giallo se un oggetto \xE8 posizionato sopra ma in posizione sbagliata,
-    invece si illumina di verde se in posizione giusta."
+    invece si illumina di verde se in posizione giusta.\nQuando gli utenti sono d'accordo
+    possono schiacciare il pulsante insieme per conrollare se la posizione dei palloncini
+    \xE8 corretta, se lo \xE8 allora vincono al gioco."
 --- !u!114 &1479574576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19250,7 +19253,9 @@ MonoBehaviour:
   tts: {fileID: 1479574573}
   ai_Conversation: {fileID: 1479574575}
   inputManager: {fileID: 1479574572}
-  speechTimeOut: 60
+  speechTimeOut: 30
+  photonView: {fileID: 1479574582}
+  infoText: {fileID: 112971310}
 --- !u!4 &1479574577
 Transform:
   m_ObjectHideFlags: 0
@@ -19308,8 +19313,46 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speechSettings_SO: {fileID: 11400000, guid: 93b260207d3dfed47a01b3cec1831299, type: 2}
-  maxRecordingDuration: 5
-  recordingFrequency: 44100
+  maxRecordingDuration: 30
+  recordingFrequency: 16000
+  silenceBeforeStopMilliseconds: 3000
+  audioSource: {fileID: 0}
+--- !u!114 &1479574581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479574571}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714575db3a4c2794e99de7c7ac58f7be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speechSettings_SO: {fileID: 11400000, guid: 93b260207d3dfed47a01b3cec1831299, type: 2}
+  infoText: {fileID: 112971310}
+--- !u!114 &1479574582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479574571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &1484073907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21670,7 +21713,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1645648873
 Transform:
   m_ObjectHideFlags: 0
@@ -21756,6 +21799,7 @@ MonoBehaviour:
   stationsPlayer2: []
   balloonsPlayer2: []
   disabler: {fileID: 0}
+  autoMoveBalloons: {fileID: 0}
   requestMatchHandler: {fileID: 0}
 --- !u!114 &1645648877
 MonoBehaviour:
@@ -21786,7 +21830,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1645648871}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ab72d50e8b7d8241ba7dc72b93006bd, type: 3}
   m_Name: 

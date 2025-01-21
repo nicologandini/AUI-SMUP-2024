@@ -18,7 +18,7 @@ public class GameMultiplayer : MonoBehaviour
 
     [Header("Utils")]
     [SerializeField] DisableOtherPlayerObjects disabler;
-    //[SerializeField] AutoMoveBalloons autoMoveBalloons;
+    [SerializeField] AutoMoveBalloons autoMoveBalloons;
     [SerializeField] RequestMatchHandler requestMatchHandler;
 
 
@@ -31,56 +31,74 @@ public class GameMultiplayer : MonoBehaviour
 
     GameObject passthrough;
     Camera mainCamera;
+	Color originalTableColor;
+	Color newTableColor;
+	
+	bool isMaster;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         GameInstance = this;
+		
         if (disabler == null) {
             disabler = FindFirstObjectByType<DisableOtherPlayerObjects>();
-        }
-        /*
+        } 
+        
         if (autoMoveBalloons == null) {
             autoMoveBalloons = GetComponent<AutoMoveBalloons>();
-        }*/
+        }
         if (requestMatchHandler == null) {
             requestMatchHandler = FindFirstObjectByType<RequestMatchHandler>();
         }
-
+		
+		
         if(PhotonNetwork.IsMasterClient) {
             _stationsPlayer = stationsPlayer1;
             _balloonsPlayer = balloonsPlayer1;
 
             //disabler.DisableObjects(stationsPlayer2);
             disabler.DisableObjects(balloonsPlayer2);
+			
+			isMaster = true;
         } else {
             _stationsPlayer = stationsPlayer2;
             _balloonsPlayer = balloonsPlayer2;
 
             //disabler.DisableObjects(stationsPlayer1);
             disabler.DisableObjects(balloonsPlayer1);
+			
+			isMaster = false;
         }
 
         /*
         if (autoMoveBalloons.SortAtStart) {
-            //autoMoveBalloons.SetBalloons(_balloonsPlayer.ToArray<GameObject>());
-            //autoMoveBalloons.SetDeliverySpots(_stationsPlayer.ToArray<GameObject>());
+            autoMoveBalloons.SetBalloons(_balloonsPlayer.ToArray<GameObject>());
+            autoMoveBalloons.SetDeliverySpots(_stationsPlayer.ToArray<GameObject>());
 
-            //autoMoveBalloons.AutoSortBalloons();
+            autoMoveBalloons.AutoSortBalloons();
         }*/
         
+		
         if(_stationsPlayer.Count != _stationsPlayer.Count){
             Debug.Log("Wrong number of balloons or statios!");
         } else {
             balloons_counter = _balloonsPlayer.Count;
         }
 
-        //ToDo: metteere a posto stationsPlayer2
-        player = new Player(_balloonsPlayer, _stationsPlayer, stationsPlayer2);
+		//////////////////////////// PROVA 
+		//_stationsPlayer = stationsPlayer1;
+        //_balloonsPlayer = balloonsPlayer1;
+		
+		/////////////////////////////////// FINE PROVA 
+		
+		
+        player = new Player(_balloonsPlayer, _stationsPlayer);
         Player p = player;
 
+		/*
         requestMatchHandler.SetPhotonView(PhotonView.Get(this));
-        requestMatchHandler.SetPlayer(player);
+        requestMatchHandler.SetPlayer(player);*/
 
         //print platforms info
         for(int i=0; i<p.getStations().Count; i++) {
@@ -106,13 +124,23 @@ public class GameMultiplayer : MonoBehaviour
         //     Invoke("FakeButtonPress", 11f);
         // }
 
-        Console_UI.Instance.ClearLog();
+        //Console_UI.Instance.ClearLog();
+		//GameObject table = GameObject.Find("table");
+		//originalTableColor = table.GetComponent<Renderer>().material.color;
+		//newTableColor = new Color (originalTableColor.r, originalTableColor.g, originalTableColor.b, 1.0f);
+		
+		Debug.Log("player is " + player);
     }
 
     public void passthroughAction()
     {
+		GameObject table = GameObject.Find("table");
+		GameObject table2 = GameObject.Find("table_R");
+		Color oldColor = table.GetComponent<Renderer>().material.color;
         if (passthrough.GetComponent<OVRPassthroughLayer>().enabled == true)
         {
+			table.GetComponent<Renderer>().material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 1.0f);
+			table2.GetComponent<Renderer>().material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 1.0f);
             mainCamera.clearFlags = CameraClearFlags.Skybox;
             passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
             setTrees(true);
@@ -126,6 +154,8 @@ public class GameMultiplayer : MonoBehaviour
         }
         else
         {
+			table.GetComponent<Renderer>().material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0.5f);
+			table2.GetComponent<Renderer>().material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 1.0f);
             mainCamera.clearFlags = CameraClearFlags.SolidColor;
             passthrough.GetComponent<OVRPassthroughLayer>().enabled = true;
             setTrees(false);
@@ -135,8 +165,8 @@ public class GameMultiplayer : MonoBehaviour
             setGround(false);
             setGrass(false);
             setClouds(false);
+			
             //mainCamera.clearFlags = CameraClearFlags.SolidColor;
-
         }
     }
 
@@ -173,7 +203,8 @@ public class GameMultiplayer : MonoBehaviour
     private void setGround(bool value)
     {
         GameObject ground = GameObject.Find("Ground");
-        ground.SetActive(value);
+        //ground.SetActive(value);
+		ground.GetComponent<Renderer>().enabled = value;
 
     }
 
@@ -244,9 +275,10 @@ public class GameMultiplayer : MonoBehaviour
         Player p = getPlayer(balloon);
             if(p.getStations().Contains(station) && p.getBalloons().Contains(balloon) && p.removeBalloon(balloon, station))
             {
-				otherStation = getOtherStation(station);
+				//otherStation = getOtherStation(station);
 				SingletonScript.Instance.stationColour(station, "yellow");
-				SingletonScript.Instance.stationColour(otherStation, "yellow");
+				changeOtherStation(station, 0); // 0 = yellow
+				//SingletonScript.Instance.stationColour(otherStation, "yellow");
                 Debug.Log("entering removeBalloon if");
                 p.removeDeliveredBalloon(station);
                 Debug.Log("Balloon " + balloon + " removed from the station " + station);
@@ -308,7 +340,14 @@ public class GameMultiplayer : MonoBehaviour
         bool match = true;
 
         Player p0 = player;
-        if (p0 == null) {Console_UI.Instance.ConsolePrint("There is no player!"); match = false;}
+        if (p0 == null) {Console_UI.Instance.ConsolePrint("There is no player!"); match = false; return match;} 
+
+        for (int i = 0; i < 6; i++) {
+            if (p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) == "NULL" || balloonsColors[i] == "NULL") {
+                match = false;
+                return match;
+            }
+        }
 
         for (int i = 0; i < 6; i++)
         {
@@ -329,6 +368,7 @@ public class GameMultiplayer : MonoBehaviour
                 
 				SingletonScript.Instance.stationColour(getOtherStation(station), "grey");
                 SingletonScript.Instance.stationColour(station, "grey");
+				//changeOtherStation(station, 1);
                 photonView.RPC("wrongStation", RpcTarget.Others, i);
 
                 match = false;
@@ -337,6 +377,7 @@ public class GameMultiplayer : MonoBehaviour
                 station = p0.getStation(i);
                 SingletonScript.Instance.stationColour(getOtherStation(station), "green");
                 SingletonScript.Instance.stationColour(station, "green");
+				//changeOtherStation(station, 2);
                 photonView.RPC("correctStation", RpcTarget.Others, i);
             }
         }
@@ -352,6 +393,7 @@ public class GameMultiplayer : MonoBehaviour
 
         SingletonScript.Instance.stationColour(getOtherStation(station), "green");
         SingletonScript.Instance.stationColour(station, "green");
+		
     }
 
     [PunRPC]
@@ -391,13 +433,66 @@ public class GameMultiplayer : MonoBehaviour
 		if (index > 6) {
 			return null;
 		} else {
-			if (PhotonNetwork.IsMasterClient) {
+			if (isMaster) {
 				return stationsPlayer2[index];
 			} else {
 				return stationsPlayer1[index];
 			}
 		}
-	
 	}
 
+	[PunRPC]
+	private void greyStation(int i, bool master) {
+			if (master) { /// devo modificare tavolo 1 dell'altro player
+				SingletonScript.Instance.stationColour(stationsPlayer1[i], "grey");
+			} else { // azione partita dal non master, devo modificare tavolo 2 del master
+				SingletonScript.Instance.stationColour(stationsPlayer2[i], "grey");
+			}
+	}
+	
+	private int getOtherStationIndex(GameObject station) {
+		int index = 11;
+        Player p0 = player;
+
+		Debug.Log(station);
+		Debug.Log(player);
+        index = p0.getStationIndex(station);
+		return index;
+	}
+	
+	public void changeOtherStation(GameObject station, int color) { // color 0 = yellow, color 1 = grey, color 2 = green
+		
+		int i;
+		
+		PhotonView photonView = PhotonView.Get(this);
+		
+		i = getOtherStationIndex(station);
+		if (i < 7) {
+			if (color == 0) {
+				photonView.RPC("yellowStation", RpcTarget.Others, i, isMaster);
+			} else if (color == 1) {
+				photonView.RPC("greyStation", RpcTarget.Others, i, isMaster);
+			} else if (color == 2) {
+				photonView.RPC("greenStation", RpcTarget.Others, i, isMaster);
+			}
+		}
+	}
+	
+	[PunRPC]
+	private void yellowStation(int i, bool master) {
+		if (master) { /// devo modificare tavolo 1 dell'altro player
+			SingletonScript.Instance.stationColour(stationsPlayer1[i], "yellow");
+		} else { // azione partita dal non master, devo modificare tavolo 2 del master
+			SingletonScript.Instance.stationColour(stationsPlayer2[i], "yellow");
+		}
+	}
+	
+	[PunRPC]
+	private void greenStation(int i, bool master) {
+		if (master) { /// devo modificare tavolo 1 dell'altro player
+			SingletonScript.Instance.stationColour(stationsPlayer1[i], "green");
+		} else { // azione partita dal non master, devo modificare tavolo 2 del master
+			SingletonScript.Instance.stationColour(stationsPlayer2[i], "green");
+		}
+	}
 }

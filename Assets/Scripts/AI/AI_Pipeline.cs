@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.CognitiveServices.Speech;
+using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -18,6 +21,14 @@ namespace AI_Pipeline {
         //[SerializeField] private InputAction actionBinding;
         [SerializeField] private float speechTimeOut = 60f;
 
+        [Header("Multiplayer")]
+        [SerializeField] private PhotonView photonView;
+
+        [Header("Debug")]
+        [SerializeField] private TextMeshProUGUI infoText;
+        
+
+
 
         private InputAction actionBinding;
 
@@ -30,9 +41,16 @@ namespace AI_Pipeline {
         {
             //startRecoButton.onClick.AddListener(() => StartSpeechPipeline());
             print($"Starting AI_Pipeline");
+            ShowInfoText("Starting AI");
             canTalk = true;
             actionBinding = inputManager.actionAssets[0].FindActionMap("Main").FindAction("X Constraint");          //actionMaps[0].actions[18];
+
             print($"actionBinding: {actionBinding}");
+            AppendInfoText($"actionBinding: {actionBinding}");
+
+            if(photonView == null) {
+                photonView = PhotonView.Get(this);
+            }
         }
 
         void Update() {
@@ -45,8 +63,12 @@ namespace AI_Pipeline {
         async void StartSpeechPipeline()
         {
             if (!canTalk) { return; }
+            if (photonView != null) {
+                photonView.RPC("SetTalkLock", RpcTarget.Others, false);  
+            }   
             canTalk= false;
             print("talking");
+            AppendInfoText("talking");
             
             string text = await sst.SpeechToText(actionBinding, speechTimeOut);
             text = $"Utente1 dice: {text}";
@@ -54,13 +76,37 @@ namespace AI_Pipeline {
             await tts.TextToSpeech(response);
 
             canTalk = true;
+            if (photonView != null) {
+                photonView.RPC("SetTalkLock", RpcTarget.Others, true);  
+            }   
             print("Can talk again");
+            AppendInfoText("Can taalk again");
         }
 
         async void Test() {
             print("inizio risposta");
             string response = await ai_Conversation.SubmitChat("ciao");
             print(response);
+        }
+
+        [PunRPC] 
+        private void SetTalkLock(bool value) {
+            canTalk = value;
+            print($"Lock AI set to {value} by other");
+        }
+
+
+
+        private void ShowInfoText(string text) {
+        if(infoText == null) { return; }
+
+        infoText.text = text;
+        }
+
+        private void AppendInfoText(string text) {
+            if(infoText == null) { return; }
+
+            infoText.text += "\n" + text;
         }
     }
 }

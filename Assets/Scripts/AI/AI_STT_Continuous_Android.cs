@@ -7,9 +7,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 using UnityEngine.Android;
+using Microsoft.CognitiveServices.Speech.Audio;
+using System.Linq;
+using TMPro;
 
 public class AI_STT_Continuous_Android : MonoBehaviour {
     [SerializeField] private SpeechSettings_SO speechSettings_SO;
+
+    [SerializeField] private TextMeshProUGUI infoText;
+
 
     private SpeechRecognizer recognizer;
     private bool isRecognizing = false; // Stato del riconoscimento
@@ -22,6 +28,7 @@ public class AI_STT_Continuous_Android : MonoBehaviour {
     private bool micPermissionGranted = false;
 
     void Start() {
+        ShowInfoText("");   
         RequestMicrophonePermission();
         InitializeSpeechRecognizer();
     }
@@ -54,20 +61,40 @@ public class AI_STT_Continuous_Android : MonoBehaviour {
     }
 
     private void InitializeSpeechRecognizer() {
-        SpeechConfig config = SpeechConfig.FromSubscription(speechSettings_SO.speechAPIKey, speechSettings_SO.region);
-        config.SpeechRecognitionLanguage = speechSettings_SO.recognitionLanguage;
-        config.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "1000"); // ms di delay prima di dividere le frasi
-        recognizer = new SpeechRecognizer(config);
+        SpeechConfig speechConfig = SpeechConfig.FromSubscription(speechSettings_SO.speechAPIKey, speechSettings_SO.region);
+        speechConfig.SpeechRecognitionLanguage = speechSettings_SO.recognitionLanguage;
+        speechConfig.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "1000"); // ms di delay prima di dividere le frasi
+        AudioConfig audioConfig = AudioConfig.FromMicrophoneInput(FindMicrophoneDevice());
+
+        if(audioConfig == null) {
+            Debug.LogWarning("None input device found!");
+            AppendInfoText("Nessun microfono trovato!");
+
+            audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+        }
+        //audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+
+        //recognizer = new SpeechRecognizer(config);
+        try {
+        recognizer = new SpeechRecognizer(speechConfig, audioConfig);
+        } catch (ApplicationException e) {
+            ShowInfoText (e.Message);
+            recognizer = new SpeechRecognizer(speechConfig, AudioConfig.FromDefaultMicrophoneInput());
+        }
 
         // Eventi:
         recognizer.Recognizing += (s, e) => {
             Debug.Log($"Parola rilevata: {e.Result.Text}");
+            AppendInfoText($"Parola rilevata: {e.Result.Text}");
+
         };
 
         recognizer.Recognized += (s, e) => {
             if (e.Result.Reason == ResultReason.RecognizedSpeech) {
                 lock (threadLocker) {
                     Debug.Log($"Frase completa riconosciuta: {e.Result.Text}");
+                    AppendInfoText($"Frase completa riconosciuta: {e.Result.Text}");
+                    
                     message += e.Result.Text;
                 }
             }
@@ -76,12 +103,16 @@ public class AI_STT_Continuous_Android : MonoBehaviour {
         recognizer.SessionStopped += (s, e) => {
             lock (threadLocker) {
                 Debug.Log("Sessione terminata.");
+                AppendInfoText("Session stopped! ");
+
                 canReturn = true;
             }
         };
 
         recognizer.Canceled += (s, e) => {
             Debug.LogError($"Errore nel riconoscimento: {e.ErrorDetails}");
+            AppendInfoText($"Errore nel riconoscimento: {e.ErrorDetails}");
+
             canReturn = true;
         };
     }
@@ -110,6 +141,8 @@ public class AI_STT_Continuous_Android : MonoBehaviour {
         message = "";
 
         Debug.Log("Riconoscimento vocale avviato...");
+        AppendInfoText("Riconoscimento vocale avviato...");
+
         await recognizer.StartContinuousRecognitionAsync();
         await WaitUntilTimeoutOrStopRequested(timeout);
 
@@ -125,6 +158,8 @@ public class AI_STT_Continuous_Android : MonoBehaviour {
         if (!isRecognizing) return;
 
         Debug.Log("Riconoscimento vocale interrotto...");
+        AppendInfoText("Riconoscimento vocale interrotto...");
+
         stopRequested = true;
         await recognizer.StopContinuousRecognitionAsync();
 
@@ -152,5 +187,61 @@ public class AI_STT_Continuous_Android : MonoBehaviour {
 
     private void ReleaseElements() {
         if (recognizer != null) { recognizer.Dispose(); }
+    }
+
+    private AudioConfig GetAudioConfig(string deviceName)
+    {
+        // Ottieni i dispositivi disponibili (funzione placeholder, usa NAudio o configurazioni manuali)
+        var availableDevices = Microphone.devices;
+        if (availableDevices.Contains(deviceName))
+        {
+            Debug.Log($"Selezionato dispositivo: {deviceName}");
+            return AudioConfig.FromMicrophoneInput(deviceName);
+        }
+
+        Debug.LogWarning($"Il dispositivo '{deviceName}' non è stato trovato. Usando il microfono di default.");
+        AppendInfoText($"Il dispositivo '{deviceName}' non è stato trovato. Usando il microfono di default.");
+
+        return AudioConfig.FromDefaultMicrophoneInput();
+    }
+
+    private string FindMicrophoneDevice() {
+        // Ottieni l'elenco dei microfoni disponibili
+        var devices = Microphone.devices;
+        if (devices.Length > 0)
+        {
+            Debug.Log("Microfoni disponibili:");
+            for (int i = 0; i < devices.Length; i++)
+            {
+                Debug.Log($"[{i}] {devices[i]}");
+            }
+
+            // Usa il primo microfono (o sostituisci con un indice specifico)
+            string microphoneDevice = devices[0]; // Cambia l'indice per scegliere un microfono specifico
+            Debug.Log("Microfono selezionato: " + microphoneDevice);
+            AppendInfoText("Microfono selezionato: " + microphoneDevice);
+
+
+            return microphoneDevice;
+        }
+        else
+        {
+            Debug.LogError("Nessun microfono trovato!");
+            AppendInfoText("Nessun microfono trovato!");
+            return "";
+        }
+    }
+
+
+    private void ShowInfoText(string text) {
+        if(infoText == null) { return; }
+
+        infoText.text = text;
+    }
+
+    private void AppendInfoText(string text) {
+        if(infoText == null) { return; }
+
+        infoText.text += "\n" + text;
     }
 }

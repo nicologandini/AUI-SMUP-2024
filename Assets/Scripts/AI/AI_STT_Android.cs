@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
@@ -14,32 +15,85 @@ public class AI_STT_Android : MonoBehaviour {
 
 
     [Header("Recoding Values")]
-    [SerializeField] private int maxRecordingDuration = 120; // Durata della registrazione in secondi
+    [SerializeField] private float maxRecordingDuration = 120; // Durata della registrazione in secondi
     [SerializeField] private int recordingFrequency = 44100; // Frequenza di campionamento (44100 Hz è standard)
+    [SerializeField] private int silenceBeforeStopMilliseconds = 3000;
+
+    [Header ("Debug")]
+    [SerializeField] private AudioSource audioSource;
 
 
     private string _microphoneDevice;
     private AudioClip _recordedClip;
     private SpeechConfig _speechConfig;
     private bool _isRecognizing;
+    private bool _stopRequested;
+    private bool _skipFirstFrame;
+    private UnityEngine.InputSystem.InputAction _actionBinding;
 
 
     void Start() {
         InitializeSpeechRecognizer();
+
+        // Testing stuff
+        // Invoke("SpeechToTextInvoke" ,3f);
+    }
+
+    private void SpeechToTextInvoke() {
+        SpeechToText(null, 20f);
+    }
+
+    private void Update() {
+        if (_isRecognizing) {
+            if (_actionBinding == null) {return;}
+            if (_skipFirstFrame) {
+                _skipFirstFrame = false;
+                return;
+            }
+
+            if (_actionBinding.ReadValue<float>() > 0 && _actionBinding.WasPressedThisFrame()) {
+                print("Talk button pressed");
+                _isRecognizing = false;
+                _stopRequested = true;
+            }
+        }
+    }
+
+    public void ResetRecognitionState() {
+        _isRecognizing = false;
     }
 
 
     public async Task<string> SpeechToText(UnityEngine.InputSystem.InputAction actionBinding, float timeout = 30f) {
         if (!_isRecognizing) {
+            _skipFirstFrame = true;
+            _stopRequested = false;
+            _actionBinding = actionBinding;
+            _isRecognizing = true;
+
             StartAudioRec();
-            await WaitForRecording();
+            await WaitUntilTimeoutOrStopRequested(math.min(timeout, maxRecordingDuration));
+
             StopAudioRecording();
             string text = await RecognizeAudioClip(_recordedClip);
 
+            ResetRecognitionState();
             return text;
         } else {
+            ResetRecognitionState();
             return "";
         }
+    }
+
+    private async Task WaitUntilTimeoutOrStopRequested(float timeout) {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < timeout && !_stopRequested) {
+            await Task.Delay(100); // Aspetta 100ms prima di controllare di nuovo
+            elapsedTime += 0.1f; // Incrementa il tempo trascorso
+        }
+
+        _stopRequested = false;
     }
 
 
@@ -47,6 +101,7 @@ public class AI_STT_Android : MonoBehaviour {
     {
         _speechConfig = SpeechConfig.FromSubscription(speechSettings_SO.speechAPIKey, speechSettings_SO.region);
         _speechConfig.SpeechRecognitionLanguage = speechSettings_SO.recognitionLanguage;
+        _speechConfig.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, silenceBeforeStopMilliseconds.ToString());
         FindMicrophone();
     }
 
@@ -76,12 +131,12 @@ public class AI_STT_Android : MonoBehaviour {
     {
         // Aspetta che la registrazione finisca
         Debug.Log($"Start waiting for {maxRecordingDuration} seconds");
-        await Task.Delay(maxRecordingDuration * 1000);      //1000 milliseconds => 1 seconds
+        await Task.Delay(Mathf.CeilToInt(maxRecordingDuration) * 1000);      //1000 milliseconds => 1 seconds
         Debug.Log($"Stop waiting");
     }
 
     private void StartAudioRec() {
-        _recordedClip = Microphone.Start(_microphoneDevice, true, maxRecordingDuration, recordingFrequency);
+        _recordedClip = Microphone.Start(_microphoneDevice, true, Mathf.CeilToInt(maxRecordingDuration), recordingFrequency);
         Debug.Log("Registrazione avviata per " + maxRecordingDuration + " secondi.");
         //AppendInfoText("Registrazione avviata per " + maxRecordingDuration + " secondi.");
     }
@@ -131,12 +186,18 @@ public class AI_STT_Android : MonoBehaviour {
         bool hasData = samples.Any(sample => Mathf.Abs(sample) > 0.0001f);
         Debug.Log(hasData ? "L'audio contiene dati validi." : "L'audio è vuoto o contiene solo zeri.");
 
-        byte[] audioData = ConvertToPCM(clip);
+        byte[] audioData;
 
-        byte[] testData = new byte[audioData.Length];
-        Array.Copy(audioData, 40000, testData, 0, 20000);
+        int targetFrequency = 16000;
+        if(clip.frequency != targetFrequency)
+            audioData = ConvertToPCMWithResample(clip);
+        else 
+            audioData = ConvertToPCM(clip);
 
-        Debug.Log($"Primi byte: {string.Join(", ", testData.Take(10000))}");
+        //AudioDebug(audioData);
+
+        // AudioClip testClip = CreateClipFromPCM("testClip", clip.samples , clip.channels);
+        // PlayClipDebug(testClip);
 
         if (audioData == null)
         {
@@ -158,6 +219,7 @@ public class AI_STT_Android : MonoBehaviour {
 
         if (recognitionResult.Reason == ResultReason.RecognizedSpeech)
         {
+            Debug.Log($"Recognition completata con questi info => \nDuarata: {recognitionResult.Duration} | Offset: {recognitionResult.OffsetInTicks}");
             return recognitionResult.Text;
         }
         else
@@ -166,6 +228,14 @@ public class AI_STT_Android : MonoBehaviour {
             Debug.LogError($"Con questi dettagli: \nDuarata: {recognitionResult.Duration} | Offset: {recognitionResult.OffsetInTicks}");
             return null;
         }
+    }
+
+    private static void AudioDebug(byte[] audioData)
+    {
+        byte[] testData = new byte[audioData.Length];
+        Array.Copy(audioData, 40000, testData, 0, 20000);
+
+        Debug.Log($"Primi byte: {string.Join(", ", testData.Take(10000))}");
     }
 
     private AudioClip ConvertToMono(AudioClip clip)
@@ -189,7 +259,49 @@ public class AI_STT_Android : MonoBehaviour {
         return monoClip;
     }
 
-    public static byte[] ConvertToPCM(AudioClip clip)
+    public byte[] ConvertToPCMWithResample(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            Debug.LogError("AudioClip is null!");
+            return null;
+        }
+
+        // Parametri per il nuovo sample rate
+        int originalSampleRate = clip.frequency; // Frequenza originale
+        int targetSampleRate = 16000;            // Frequenza desiderata (16 kHz)
+
+        // Ottieni i dati grezzi dell'audio
+        int originalSamples = clip.samples * clip.channels;
+        float[] audioData = new float[originalSamples];
+        clip.GetData(audioData, 0);
+
+        // Calcola il nuovo numero di campioni dopo il downsampling
+        float resampleRatio = (float)targetSampleRate / originalSampleRate;
+        int resampledSamples = Mathf.CeilToInt(originalSamples * resampleRatio);
+
+        // Esegui il downsampling
+        float[] resampledData = ResampleAudio(audioData, clip.channels, originalSampleRate, targetSampleRate);
+
+        // Inizializza il buffer per i dati PCM (16 bit = 2 byte per campione)
+        byte[] pcmData = new byte[resampledData.Length * 2];
+
+        int pcmIndex = 0;
+        for (int i = 0; i < resampledData.Length; i++)
+        {
+            // Scala il valore del campione da float (-1.0f a 1.0f) a short (-32768 a 32767)
+            float gain = 1f;
+            short sample = (short)Mathf.Clamp(resampledData[i] * 32767f * gain, short.MinValue, short.MaxValue);
+
+            // Scrivi il campione nel buffer PCM (Little Endian: byte meno significativo prima)
+            pcmData[pcmIndex++] = (byte)(sample & 0xFF);            // Byte meno significativo
+            pcmData[pcmIndex++] = (byte)((sample >> 8) & 0xFF);     // Byte più significativo
+        }
+
+        return pcmData;
+    }
+
+    public byte[] ConvertToPCM(AudioClip clip)
     {
         if (clip == null)
         {
@@ -215,18 +327,88 @@ public class AI_STT_Android : MonoBehaviour {
             // Scrivi il campione nel buffer PCM (Little Endian: byte meno significativo prima)
             pcmData[pcmIndex++] = (byte)(sample & 0xFF);            // Byte meno significativo
             pcmData[pcmIndex++] = (byte)((sample >> 8) & 0xFF);     // Byte più significativo
+
+            // if(i % 100000 == 0) {
+            //     print("-----------------------------");
+            //     print($"{i}th sample has value {audioData[i]} => {sample}");
+            //     print($"with pcmData values: {pcmData[--pcmIndex]} {pcmData[--pcmIndex]}");
+            //     print("-----------------------------");
+
+            //     pcmIndex += 2;
+            // }
         }
 
-
-        // byte[] testData = new byte[pcmData.Length];
-        // Array.Copy(pcmData, 40000, testData, 0, 20000);
-
-        // Debug.Log($"Primi byte in method: {string.Join(", ", testData.Take(10000))}");
+        //PlayClipDebug(CreateClipFromPCM("testClip", clip.samples, clip.channels, ConvertPCM16ToFloat(pcmData)));
 
         return pcmData;
     }
 
+    private float[] ResampleAudio(float[] audioData, int channels, int originalSampleRate, int targetSampleRate)
+    {
+        float resampleRatio = (float)targetSampleRate / originalSampleRate;
+        int resampledLength = Mathf.CeilToInt(audioData.Length * resampleRatio / channels) * channels;
+    try {
+        float[] resampledData = new float[resampledLength];
 
+        for (int i = 0; i < resampledLength / channels; i++)
+        {
+            // Calcola l'indice del campione originale corrispondente
+            float originalIndex = i / resampleRatio;
+            int originalIndexFloor = Mathf.FloorToInt(originalIndex);
+            int originalIndexCeil = Mathf.Min(originalIndexFloor + 1, (audioData.Length / channels) - 1);
+
+            float t = originalIndex - originalIndexFloor;
+
+            // Interpolazione lineare per ogni canale
+            for (int channel = 0; channel < channels; channel++)
+            {
+                float sample1 = audioData[originalIndexFloor * channels + channel];
+                float sample2 = audioData[originalIndexCeil * channels + channel];
+                resampledData[i * channels + channel] = Mathf.Lerp(sample1, sample2, t);
+            }
+        }
+
+        return resampledData;
+    } catch (IndexOutOfRangeException e) {
+        print($"Lengths => original: {audioData.Length} | Resampled: {resampledLength} | channels: {channels}");
+        Debug.LogError(e.Message);
+        Debug.LogError(e.StackTrace);
+        return null;
+    }
+    }
+
+    float[] ConvertPCM16ToFloat(byte[] byteArray)
+    {
+        int sampleCount = byteArray.Length / 2; // 2 byte per campione
+        float[] floatArray = new float[sampleCount];
+
+        for (int i = 0; i < sampleCount; i++)
+        {
+            int byteIndex = i * 2;
+            short sample = (short)(byteArray[byteIndex] | (byteArray[byteIndex + 1] << 8)); // Unisci i due byte in un short
+            floatArray[i] = sample / 32768f; // Normalizza in un range tra -1.0f e 1.0f
+        }
+
+        return floatArray;
+    }
+
+    private AudioClip CreateClipFromPCM(string clipName, int samples, int channels, float[] data)
+    {
+        AudioClip testClip = AudioClip.Create(clipName, samples, channels, recordingFrequency, false);
+        testClip.SetData(data, 0);
+
+        return testClip;
+    }
+
+    private void PlayClipDebug(AudioClip clip) {
+        if (audioSource == null) {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.loop = true;
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
 
     void DebugRecording(AudioClip clip)
     {

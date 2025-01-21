@@ -10,10 +10,10 @@ namespace SMUP.GameLogic {
 		List<GameObject> otherStations;
         Hashtable deliveredItems;  // key: station, value: balloon
 
-        public Player(List<GameObject> balloons, List<GameObject> stations, List<GameObject> otherStations){
+        public Player(List<GameObject> balloons, List<GameObject> stations/*, List<GameObject> otherStations*/){
             this.balloons = balloons;
             this.stations = stations;
-			this.otherStations = otherStations;
+			//this.otherStations = otherStations;
             this.deliveredItems = new Hashtable();
             foreach(GameObject s in stations){
                 this.deliveredItems.Add(s, null);
@@ -122,7 +122,7 @@ namespace SMUP.GameLogic {
 					return i;
 				}
 			}
-			return 0;
+			return 11;
 		}
     }
 }
