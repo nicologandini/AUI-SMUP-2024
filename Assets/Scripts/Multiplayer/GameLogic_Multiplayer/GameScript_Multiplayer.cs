@@ -115,9 +115,9 @@ public class GameMultiplayer : MonoBehaviour
 
         GameObject camera = GameObject.Find("MR Interaction Setup");
         GameObject xrorigin = camera.transform.GetChild(3).gameObject;
-        // camera = xrorigin.transform.GetChild(0).gameObject;
-        // passthrough = camera.transform.GetChild(0).gameObject;
-        // passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
+        camera = xrorigin.transform.GetChild(0).gameObject;
+        passthrough = camera.transform.GetChild(0).gameObject;
+        passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
 
         // // Pretend to press the button
         // if (PhotonNetwork.IsMasterClient) {
@@ -156,8 +156,8 @@ public class GameMultiplayer : MonoBehaviour
         }
         else
         {
-			table.GetComponent<Renderer>().material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0.5f);
-			table2.GetComponent<Renderer>().material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 1.0f);
+			table.GetComponent<Renderer>().material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0.4f);
+			table2.GetComponent<Renderer>().material.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0.4f);
             mainCamera.clearFlags = CameraClearFlags.SolidColor;
             passthrough.GetComponent<OVRPassthroughLayer>().enabled = true;
             setTrees(false);
@@ -206,7 +206,7 @@ public class GameMultiplayer : MonoBehaviour
     {
         GameObject ground = GameObject.Find("Ground");
         //ground.SetActive(value);
-		ground.GetComponent<Renderer>().enabled = value;
+		//ground.GetComponent<Renderer>().enabled = value;
 
     }
 
@@ -215,7 +215,8 @@ public class GameMultiplayer : MonoBehaviour
         GameObject walls = GameObject.Find("Walls");
         for (int i = 0; i < 22; i++)
         {
-            walls.transform.GetChild(i).gameObject.SetActive(value);
+            //walls.transform.GetChild(i).gameObject.SetActive(value);
+            walls.transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = value;
         }
     }
 
@@ -247,9 +248,13 @@ public class GameMultiplayer : MonoBehaviour
     private void setClouds(bool value)
     {
         GameObject clouds = GameObject.Find("SM_Generic_CloudRing_01");
-        clouds.SetActive(value);
         GameObject sky = GameObject.Find("SM_SimpleSky_Dome_01");
-        sky.SetActive(value);
+
+        // clouds.SetActive(value);
+        // sky.SetActive(value);
+
+        clouds.GetComponent<Renderer>().enabled = value;
+        sky.GetComponent<Renderer>().enabled = value;
     }
 
     public void addBalloon(GameObject balloon, GameObject station){
