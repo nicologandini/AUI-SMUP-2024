@@ -23,9 +23,11 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/Multiplayer/Lobby.unity
   - m_enabled: 1
+    m_path: Assets/Scenes/Multiplayer/WaitingRoom.unity
+  - m_enabled: 0
     m_path: Assets/Scenes/OutsideScene.unity
   - m_enabled: 1
-    m_path: Assets/Scenes/Multiplayer/WaitingRoom.unity
+    m_path: Assets/Scenes/outside passthrough2.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings:
@@ -175,16 +177,6 @@ MonoBehaviour:
         2}'
     - line: '|   - {fileID: 11400000, guid: 2829f033c665346eab7c849759667e58, type:
         2}'
-    - line: '|   - {fileID: 11400000, guid: 56a98106ce58f09459a9990007b50acb, type:
-        2}'
-    - line: '|   - {fileID: 6622563926228747295, guid: 136958f90a130274b8b70a31eed352fb,
-        type: 2}'
-    - line: '|   - {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type:
-        2}'
-    - line: '|   - {fileID: 11400000, guid: 4493502c4ff331245876fff9ac6d6b45, type:
-        2}'
-    - line: '|   - {fileID: -6517218471499782410, guid: 1a4c68ca72a83449f938d669337cb305,
-        type: 2}'
     - line: '|   metroInputSource: 0'
     - line: '|   wsaTransparentSwapchain: 0'
     - line: '|   m_HolographicPauseOnTrackingLoss: 1'

@@ -35,12 +35,16 @@ public class GameMultiplayer : MonoBehaviour
 	Color newTableColor;
 	
 	bool isMaster;
+	
+	[SerializeField] List<GameObject> smallTable1 = null; 
+	[SerializeField] List<GameObject> smallTable2 = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         GameInstance = this;
 
+		
 		// disabilitare da qui per attivare pasthru
         if (disabler == null) {
             disabler = FindFirstObjectByType<DisableOtherPlayerObjects>();
@@ -60,6 +64,7 @@ public class GameMultiplayer : MonoBehaviour
 
             //disabler.DisableObjects(stationsPlayer2);
             disabler.DisableObjects(balloonsPlayer2);
+			disabler.DisableObjects(smallTable2);
 			
 			isMaster = true;
         } else {
@@ -68,6 +73,7 @@ public class GameMultiplayer : MonoBehaviour
 
             //disabler.DisableObjects(stationsPlayer1);
             disabler.DisableObjects(balloonsPlayer1);
+			disabler.DisableObjects(smallTable1);
 			
 			isMaster = false;
         }
