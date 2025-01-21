@@ -40,7 +40,8 @@ public class GameMultiplayer : MonoBehaviour
     void Start()
     {
         GameInstance = this;
-		
+
+		// disabilitare da qui per attivare pasthru
         if (disabler == null) {
             disabler = FindFirstObjectByType<DisableOtherPlayerObjects>();
         } 
@@ -77,19 +78,19 @@ public class GameMultiplayer : MonoBehaviour
             autoMoveBalloons.SetDeliverySpots(_stationsPlayer.ToArray<GameObject>());
 
             autoMoveBalloons.AutoSortBalloons();
-        }*/
+        }
         
 		
         if(_stationsPlayer.Count != _stationsPlayer.Count){
             Debug.Log("Wrong number of balloons or statios!");
         } else {
             balloons_counter = _balloonsPlayer.Count;
-        }
+        } // disabilitare fino a qui per disabilitare psthrugh*/
 
-		//////////////////////////// PROVA 
-		//_stationsPlayer = stationsPlayer1;
-        //_balloonsPlayer = balloonsPlayer1;
-		
+		//////////////////////////// Da abilitare per Passthrough
+		// _stationsPlayer = stationsPlayer1;
+        // _balloonsPlayer = balloonsPlayer1;
+	
 		/////////////////////////////////// FINE PROVA 
 		
 		
@@ -98,7 +99,8 @@ public class GameMultiplayer : MonoBehaviour
 
 		/*
         requestMatchHandler.SetPhotonView(PhotonView.Get(this));
-        requestMatchHandler.SetPlayer(player);*/
+        requestMatchHandler.SetPlayer(player);
+        */
 
         //print platforms info
         for(int i=0; i<p.getStations().Count; i++) {
@@ -113,9 +115,9 @@ public class GameMultiplayer : MonoBehaviour
 
         GameObject camera = GameObject.Find("MR Interaction Setup");
         GameObject xrorigin = camera.transform.GetChild(3).gameObject;
-        camera = xrorigin.transform.GetChild(0).gameObject;
-        passthrough = camera.transform.GetChild(0).gameObject;
-        passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
+        // camera = xrorigin.transform.GetChild(0).gameObject;
+        // passthrough = camera.transform.GetChild(0).gameObject;
+        // passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
 
         // // Pretend to press the button
         // if (PhotonNetwork.IsMasterClient) {
@@ -253,6 +255,7 @@ public class GameMultiplayer : MonoBehaviour
     public void addBalloon(GameObject balloon, GameObject station){
         //foreach(Player p in players){
         Player p = getPlayer(balloon);
+        print($"player: {p}");
 
         Debug.Log("Sto cercando il palloncino " + balloon + balloon.GetInstanceID() + " e la stazione " + station + station.GetInstanceID() + " nel player ");
         Debug.Log(p.getStations().Contains(station));
@@ -340,15 +343,16 @@ public class GameMultiplayer : MonoBehaviour
         bool match = true;
 
         Player p0 = player;
-        if (p0 == null) {Console_UI.Instance.ConsolePrint("There is no player!"); match = false; return match;} 
+        if (p0 == null) {Console_UI.Instance.ConsolePrint("There is no player!"); match = false; }
 
-        for (int i = 0; i < 6; i++) {
-            if (p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) == "NULL" || balloonsColors[i] == "NULL") {
-                match = false;
-                return match;
-            }
-        }
-
+		
+		for (int i = 0; i < 6; i++) {
+			if (p0.GetBalloonColorName(p0.getBalloon(p0.getStation(i))) == "NULL" || balloonsColors[i] == "NULL") {
+				match = false;
+				return match;
+			}
+		}
+		
         for (int i = 0; i < 6; i++)
         {
             GameObject station;

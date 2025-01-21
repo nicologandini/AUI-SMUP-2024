@@ -12,6 +12,7 @@ public class DisableOtherPlayerObjects : MonoBehaviour
 
 
     private void Start() {
+		/*
         if(PhotonNetwork.IsMasterClient) {
             foreach(GameObject obj in guestObjects) {
                 obj.SetActive(false);
@@ -20,7 +21,7 @@ public class DisableOtherPlayerObjects : MonoBehaviour
             foreach(GameObject obj in masterObjects) {
                 obj.SetActive(false);
             }
-        }
+        }*/
     }
 
     public void DisableObjects(List<GameObject> objects) {

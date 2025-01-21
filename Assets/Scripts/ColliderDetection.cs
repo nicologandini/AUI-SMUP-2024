@@ -10,7 +10,6 @@ public class ColliderDetection : MonoBehaviour
     
     private void OnTriggerEnter(Collider c)
     {
-        /* Ok code
         Debug.Log("I'm the trigger, someone has entered");
         if (c.tag == "SortingObject")  // If the tag of the object is equal to "SortingObject"
         {
@@ -20,12 +19,12 @@ public class ColliderDetection : MonoBehaviour
             if (SingletonScript.Instance.getStationColor(this.transform.parent.gameObject) == "yellow (Instance)")
             {
                 SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "grey");
-				GameInstance.changeOtherStation(this.transform.parent.gameObject, false);
+				GameInstance.changeOtherStation(this.transform.parent.gameObject, 1);
+                //SingletonScript.Instance.stationColour(GameInstance.getOtherStation(this.transform.parent.gameObject), "grey");
             }
             
             GameInstance.addBalloon(collidingObject, this.transform.parent.gameObject);
         }
-        */
     }
     
     private void OnTriggerExit(Collider c)
