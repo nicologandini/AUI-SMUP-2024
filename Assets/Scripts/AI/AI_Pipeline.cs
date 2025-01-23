@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
-namespace AI_Pipeline {
+namespace SMUP.AI {
     public class AI_Pipeline : MonoBehaviour
     {
         [Header("Components")]
@@ -23,6 +23,9 @@ namespace AI_Pipeline {
 
         [Header("Multiplayer")]
         [SerializeField] private PhotonView photonView;
+
+        [Header("AI Avatar")]
+        [SerializeField] private AIAvatar_Manager avatarManager;
 
         [Header("Debug")]
         [SerializeField] private TextMeshProUGUI infoText;
@@ -51,6 +54,10 @@ namespace AI_Pipeline {
             if(photonView == null) {
                 photonView = PhotonView.Get(this);
             }
+
+            if (avatarManager != null) {
+                avatarManager.SetAllCloud(false);
+            }
         }
 
         void Update() {
@@ -69,11 +76,21 @@ namespace AI_Pipeline {
             canTalk= false;
             print("talking");
             AppendInfoText("talking");
+            SetAvatarCloud(CloudType.THINKING_CLOUD, true);
             
             string text = await sst.SpeechToText(actionBinding, speechTimeOut);
+            if(text ==  null || text == "") {
+                Debug.Log("NO valid text found!");
+                SetAvatarCloud(CloudType.NONE, false);
+                return;
+            }
+
             text = $"Utente1 dice: {text}";
             string response = await ai_Conversation.SubmitChat(text);
+
+            SetAvatarCloud(CloudType.OK_CLOUD, true);
             await tts.TextToSpeech(response);
+
 
             canTalk = true;
             if (photonView != null) {
@@ -81,6 +98,7 @@ namespace AI_Pipeline {
             }   
             print("Can talk again");
             AppendInfoText("Can taalk again");
+            SetAvatarCloud(CloudType.NONE, false);
         }
 
         async void Test() {
@@ -92,10 +110,23 @@ namespace AI_Pipeline {
         [PunRPC] 
         private void SetTalkLock(bool value) {
             canTalk = value;
+
+            if(!canTalk) {
+                SetAvatarCloud(CloudType.NEGATIVE_CLOUD, true);
+            } else {
+                SetAvatarCloud(CloudType.NONE, false);
+            }
+
             print($"Lock AI set to {value} by other");
         }
 
+        private void SetAvatarCloud(CloudType cloudType, bool value) {
+            if (avatarManager == null) { return; }
 
+            avatarManager.SetAllCloud(false);
+            avatarManager.SetCloud(cloudType, value);
+        }
+        
 
         private void ShowInfoText(string text) {
         if(infoText == null) { return; }

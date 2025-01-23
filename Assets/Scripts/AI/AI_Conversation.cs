@@ -10,57 +10,59 @@ using OpenAI.Models;
 using UnityEngine;
 using Utilities.Async;
 
-public class AI_Conversation : MonoBehaviour
-{
-    [SerializeField] private OpenAIConfiguration configuration;
-    [SerializeField] [TextArea(3, 10)] private string systemPrompt = "Sei un assistente di un negozio di scarpe.";
-
-    private OpenAIClient openAI;
-    private readonly Conversation conversation = new();
-    private readonly List<Tool> assistantTools = new();
-
-        
-    private void Awake()
+namespace SMUP.AI {
+    public class AI_Conversation : MonoBehaviour
     {
-        openAI = new OpenAIClient(configuration);
-        conversation.AppendMessage(new Message(Role.System, systemPrompt));
-        assistantTools.Add(Tool.GetOrCreateTool(openAI.ImagesEndPoint, nameof(ImagesEndpoint.GenerateImageAsync)));
-    }
+        [SerializeField] private OpenAIConfiguration configuration;
+        [SerializeField] [TextArea(3, 10)] private string systemPrompt = "Sei un assistente di un negozio di scarpe.";
 
-    private static bool isChatPending;
+        private OpenAIClient openAI;
+        private readonly Conversation conversation = new();
+        private readonly List<Tool> assistantTools = new();
 
-    public async Task<string> SubmitChat(string text)
-    {
-        if (isChatPending) { return ""; }
-        isChatPending = true;
-
-        conversation.AppendMessage(new Message(Role.User, text));
-
-        try
+            
+        private void Awake()
         {
-            var request = new ChatRequest(conversation.Messages, tools: assistantTools);
-            ChatResponse response = await openAI.ChatEndpoint.StreamCompletionAsync(request, resultHandler: deltaResponse =>{}, cancellationToken: destroyCancellationToken);
-
-            conversation.AppendMessage(response.FirstChoice.Message);
-            return response;
+            openAI = new OpenAIClient(configuration);
+            conversation.AppendMessage(new Message(Role.System, systemPrompt));
+            assistantTools.Add(Tool.GetOrCreateTool(openAI.ImagesEndPoint, nameof(ImagesEndpoint.GenerateImageAsync)));
         }
-        catch (Exception e)
+
+        private static bool isChatPending;
+
+        public async Task<string> SubmitChat(string text)
         {
-            switch (e)
+            if (isChatPending) { return ""; }
+            isChatPending = true;
+
+            conversation.AppendMessage(new Message(Role.User, text));
+
+            try
             {
-                case TaskCanceledException:
-                case OperationCanceledException:
-                    break;
-                default:
-                    Debug.LogError(e);
-                    break;
-            }
-        }
-        finally
-        {
-            isChatPending = false;
-        }
+                var request = new ChatRequest(conversation.Messages, tools: assistantTools);
+                ChatResponse response = await openAI.ChatEndpoint.StreamCompletionAsync(request, resultHandler: deltaResponse =>{}, cancellationToken: destroyCancellationToken);
 
-        return "";
+                conversation.AppendMessage(response.FirstChoice.Message);
+                return response;
+            }
+            catch (Exception e)
+            {
+                switch (e)
+                {
+                    case TaskCanceledException:
+                    case OperationCanceledException:
+                        break;
+                    default:
+                        Debug.LogError(e);
+                        break;
+                }
+            }
+            finally
+            {
+                isChatPending = false;
+            }
+
+            return "";
+        }
     }
 }
