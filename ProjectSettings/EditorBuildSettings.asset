@@ -5,10 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/Lobby.unity
+    guid: 2d3084f5ccc3b354c8a1fdf2212bc18d
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer/WaitingRoom.unity
+    guid: 90261fa66e7dae5498df47b983bb6c3f
+  - enabled: 1
     path: Assets/Scenes/OutsideScene.unity
     guid: 03a03620e5f9e44508636fdc017ac81a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/In_old.unity
     guid: 55efb881264014e87be15cbced38d22e
   m_configObjects:

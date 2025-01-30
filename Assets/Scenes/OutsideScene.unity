@@ -18325,7 +18325,7 @@ MonoBehaviour:
   - {fileID: 1405154571}
   - {fileID: 672147497}
   - {fileID: 1410695400}
-  sortAtStart: 1
+  sortAtStart: 0
 --- !u!1001 &1650675301
 PrefabInstance:
   m_ObjectHideFlags: 0
