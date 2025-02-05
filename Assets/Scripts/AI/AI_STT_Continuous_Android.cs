@@ -14,9 +14,7 @@ using TMPro;
 namespace SMUP.AI {
     public class AI_STT_Continuous_Android : MonoBehaviour {
         [SerializeField] private SpeechSettings_SO speechSettings_SO;
-
-        [SerializeField] private TextMeshProUGUI infoText;
-
+        [SerializeField] private bool isDebug;
 
         private SpeechRecognizer recognizer;
         private bool isRecognizing = false; // Stato del riconoscimento
@@ -29,7 +27,7 @@ namespace SMUP.AI {
         private bool micPermissionGranted = false;
 
         void Start() {
-            ShowInfoText("");   
+            if (isDebug) {DebugDialogue.Instance.ShowInfoText("");}
             RequestMicrophonePermission();
             InitializeSpeechRecognizer();
         }
@@ -49,14 +47,15 @@ namespace SMUP.AI {
 
         public async Task<string> SpeechToText(UnityEngine.InputSystem.InputAction actionBinding, float timeout = 30f) {
             if (!isRecognizing && micPermissionGranted) {
-                InitializeSpeechRecognizer();
                 SetStopCallback(actionBinding);
+                InitializeSpeechRecognizer();
                 string text = await StartSpeechRecognition(timeout);
                 ReleaseElements();
 
                 return text;
             } else {
                 Debug.LogError("Riconoscimento già in corso o permesso microfono non concesso.");
+                DebugDialogue.Instance.AppendInfoText("Riconoscimento già in corso o permesso microfono non concesso.");
                 return "";
             }
         }
@@ -69,7 +68,7 @@ namespace SMUP.AI {
 
             if(audioConfig == null) {
                 Debug.LogWarning("None input device found!");
-                AppendInfoText("Nessun microfono trovato!");
+                if (isDebug) {DebugDialogue.Instance.AppendInfoText("Nessun microfono trovato!");}
 
                 audioConfig = AudioConfig.FromDefaultMicrophoneInput();
             }
@@ -79,14 +78,14 @@ namespace SMUP.AI {
             try {
             recognizer = new SpeechRecognizer(speechConfig, audioConfig);
             } catch (ApplicationException e) {
-                ShowInfoText (e.Message);
+                if (isDebug) {DebugDialogue.Instance.ShowInfoText ($"{e.Message} \nScelto il microfono di default!");}
                 recognizer = new SpeechRecognizer(speechConfig, AudioConfig.FromDefaultMicrophoneInput());
             }
 
             // Eventi:
             recognizer.Recognizing += (s, e) => {
                 Debug.Log($"Parola rilevata: {e.Result.Text}");
-                AppendInfoText($"Parola rilevata: {e.Result.Text}");
+                if (isDebug) {DebugDialogue.Instance.AppendInfoText($"Parola rilevata: {e.Result.Text}");}
 
             };
 
@@ -94,9 +93,10 @@ namespace SMUP.AI {
                 if (e.Result.Reason == ResultReason.RecognizedSpeech) {
                     lock (threadLocker) {
                         Debug.Log($"Frase completa riconosciuta: {e.Result.Text}");
-                        AppendInfoText($"Frase completa riconosciuta: {e.Result.Text}");
                         
                         message += e.Result.Text;
+                        canReturn = true;
+                        if (isDebug) {DebugDialogue.Instance.AppendInfoText($"Frase completa riconosciuta: {e.Result.Text}");}
                     }
                 }
             };
@@ -104,15 +104,15 @@ namespace SMUP.AI {
             recognizer.SessionStopped += (s, e) => {
                 lock (threadLocker) {
                     Debug.Log("Sessione terminata.");
-                    AppendInfoText("Session stopped! ");
 
                     canReturn = true;
+                    if (isDebug) {DebugDialogue.Instance.AppendInfoText("Session stopped!");}
                 }
             };
 
             recognizer.Canceled += (s, e) => {
                 Debug.LogError($"Errore nel riconoscimento: {e.ErrorDetails}");
-                AppendInfoText($"Errore nel riconoscimento: {e.ErrorDetails}");
+                if (isDebug) {DebugDialogue.Instance.AppendInfoText($"Errore nel riconoscimento: {e.ErrorDetails}");}
 
                 canReturn = true;
             };
@@ -142,14 +142,19 @@ namespace SMUP.AI {
             message = "";
 
             Debug.Log("Riconoscimento vocale avviato...");
-            AppendInfoText("Riconoscimento vocale avviato...");
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("Riconoscimento vocale avviato...");}
 
             await recognizer.StartContinuousRecognitionAsync();
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("Aspetto Timeout speech o stop press");}
             await WaitUntilTimeoutOrStopRequested(timeout);
 
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("Stop al speech recognition");}
             StopSpeechRecognition();
+
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("Aspetto il permesso di return");}
             await WaitToReturn();
 
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("Returning...");}
             lock (threadLocker) {
                 return message;
             }
@@ -157,9 +162,10 @@ namespace SMUP.AI {
 
         private async void StopSpeechRecognition() {
             if (!isRecognizing) return;
+            if (stopRequested) return;
 
             Debug.Log("Riconoscimento vocale interrotto...");
-            AppendInfoText("Riconoscimento vocale interrotto...");
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("Riconoscimento vocale interrotto...");}
 
             stopRequested = true;
             await recognizer.StopContinuousRecognitionAsync();
@@ -201,7 +207,7 @@ namespace SMUP.AI {
             }
 
             Debug.LogWarning($"Il dispositivo '{deviceName}' non è stato trovato. Usando il microfono di default.");
-            AppendInfoText($"Il dispositivo '{deviceName}' non è stato trovato. Usando il microfono di default.");
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText($"Il dispositivo '{deviceName}' non è stato trovato. Usando il microfono di default.");}
 
             return AudioConfig.FromDefaultMicrophoneInput();
         }
@@ -220,7 +226,7 @@ namespace SMUP.AI {
                 // Usa il primo microfono (o sostituisci con un indice specifico)
                 string microphoneDevice = devices[0]; // Cambia l'indice per scegliere un microfono specifico
                 Debug.Log("Microfono selezionato: " + microphoneDevice);
-                AppendInfoText("Microfono selezionato: " + microphoneDevice);
+                if (isDebug) {DebugDialogue.Instance.AppendInfoText("Microfono selezionato: " + microphoneDevice);}
 
 
                 return microphoneDevice;
@@ -228,22 +234,12 @@ namespace SMUP.AI {
             else
             {
                 Debug.LogError("Nessun microfono trovato!");
-                AppendInfoText("Nessun microfono trovato!");
+                if (isDebug) {DebugDialogue.Instance.AppendInfoText("Nessun microfono trovato!");}
                 return "";
             }
         }
 
 
-        private void ShowInfoText(string text) {
-            if(infoText == null) { return; }
-
-            infoText.text = text;
-        }
-
-        private void AppendInfoText(string text) {
-            if(infoText == null) { return; }
-
-            infoText.text += "\n" + text;
-        }
+        
     }
 }

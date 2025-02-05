@@ -17,7 +17,7 @@ namespace SMUP.Multiplayer
                 return;
             }
             Console_UI.Instance.ConsolePrint("PhotonNetwork : Loading scene");
-            PhotonNetwork.LoadLevel("outside passthrough2");
+            PhotonNetwork.LoadLevel("MicTest");
         }
 
     #endregion

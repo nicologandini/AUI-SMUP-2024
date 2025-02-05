@@ -12,7 +12,7 @@ namespace SMUP.AI {
     public class AI_Pipeline : MonoBehaviour
     {
         [Header("Components")]
-        [SerializeField] private AI_STT_Android sst;
+        [SerializeField] private AI_STT_Continuous_Android sst;
         [SerializeField] private AI_TTS tts;
         [SerializeField] private AI_Conversation ai_Conversation;
 
@@ -28,7 +28,7 @@ namespace SMUP.AI {
         [SerializeField] private AIAvatar_Manager avatarManager;
 
         [Header("Debug")]
-        [SerializeField] private TextMeshProUGUI infoText;
+        [SerializeField] private bool isDebug;
         
 
 
@@ -44,12 +44,12 @@ namespace SMUP.AI {
         {
             //startRecoButton.onClick.AddListener(() => StartSpeechPipeline());
             print($"Starting AI_Pipeline");
-            ShowInfoText("Starting AI");
+            if (isDebug) {DebugDialogue.Instance.ShowInfoText("Starting AI");}
             canTalk = true;
             actionBinding = inputManager.actionAssets[0].FindActionMap("Main").FindAction("X Constraint");          //actionMaps[0].actions[18];
 
             print($"actionBinding: {actionBinding}");
-            AppendInfoText($"actionBinding: {actionBinding}");
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText($"actionBinding: {actionBinding}");}
 
             if(photonView == null) {
                 photonView = PhotonView.Get(this);
@@ -73,9 +73,9 @@ namespace SMUP.AI {
             if (photonView != null) {
                 photonView.RPC("SetTalkLock", RpcTarget.Others, false);  
             }   
-            canTalk= false;
+            canTalk = false;
             print("talking");
-            AppendInfoText("talking");
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("talking");}
             SetAvatarCloud(CloudType.THINKING_CLOUD, true);
             
             string text = await sst.SpeechToText(actionBinding, speechTimeOut);
@@ -97,7 +97,7 @@ namespace SMUP.AI {
                 photonView.RPC("SetTalkLock", RpcTarget.Others, true);  
             }   
             print("Can talk again");
-            AppendInfoText("Can taalk again");
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("Can taalk again");}
             SetAvatarCloud(CloudType.NONE, false);
         }
 
@@ -125,19 +125,6 @@ namespace SMUP.AI {
 
             avatarManager.SetAllCloud(false);
             avatarManager.SetCloud(cloudType, value);
-        }
-        
-
-        private void ShowInfoText(string text) {
-        if(infoText == null) { return; }
-
-        infoText.text = text;
-        }
-
-        private void AppendInfoText(string text) {
-            if(infoText == null) { return; }
-
-            infoText.text += "\n" + text;
         }
     }
 }
