@@ -1,0 +1,1 @@
+/Users/giuseppeanzillotti/Documents/GitHub/AUI-SMUP-2024/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/2e555v61/obj/arm64-v8a
