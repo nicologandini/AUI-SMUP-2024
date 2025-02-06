@@ -2,10 +2,19 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text.RegularExpressions;
-using static GameMultiplayer;       //Changed to multiplayer
+using static GameMultiplayer;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;       //Changed to multiplayer
 
 public class ColliderDetection : MonoBehaviour
 {
+    [SerializeField] private HapticImpulsePlayer m_HapticImpulsePlayer;
+    public float intensity = 0.5f; // Intensità della vibrazione (da 0 a 1)
+    public float duration = 0.2f;  // Durata della vibrazione in secondi
+    public float frequency = 0.0f;  // 0.0 per usare valore di default
+
+
 	private GameObject collidingObject = null;
     
     private void OnTriggerEnter(Collider c)
@@ -25,8 +34,17 @@ public class ColliderDetection : MonoBehaviour
             
             GameInstance.addBalloon(collidingObject, this.transform.parent.gameObject);
         }
+
+
+        HapticImpulsePlayer interactor = c.GetComponent<HapticImpulsePlayer>();
+        DebugDialogue.Instance.AppendInfoText("Interactor is null?:" + (interactor == null));
+
+        if (interactor != null)
+        {
+            DebugDialogue.Instance.AppendInfoText("Interactor is " + interactor.gameObject.name);
+            interactor.SendHapticImpulse(intensity, duration, frequency);
+        }
     }
-    
     private void OnTriggerExit(Collider c)
     {
         Debug.Log("Exit event from the trigger");

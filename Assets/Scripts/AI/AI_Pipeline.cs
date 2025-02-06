@@ -12,7 +12,7 @@ namespace SMUP.AI {
     public class AI_Pipeline : MonoBehaviour
     {
         [Header("Components")]
-        [SerializeField] private AI_STT_Continuous_Android sst;
+        [SerializeField] private AI_STT_Android sst;
         [SerializeField] private AI_TTS tts;
         [SerializeField] private AI_Conversation ai_Conversation;
 

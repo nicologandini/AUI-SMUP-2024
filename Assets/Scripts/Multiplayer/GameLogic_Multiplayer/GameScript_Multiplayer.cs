@@ -4,6 +4,8 @@ using System.Linq;
 using Photon.Pun;
 using SMUP.GameLogic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class GameMultiplayer : MonoBehaviour
 {
@@ -20,6 +22,7 @@ public class GameMultiplayer : MonoBehaviour
     [SerializeField] DisableOtherPlayerObjects disabler;
     [SerializeField] AutoMoveBalloons autoMoveBalloons;
     [SerializeField] RequestMatchHandler requestMatchHandler;
+    [SerializeField] private InputActionManager inputManager;
 
 
     List <GameObject> _stationsPlayer = null;  
@@ -33,6 +36,7 @@ public class GameMultiplayer : MonoBehaviour
     Camera mainCamera;
 	Color originalTableColor;
 	Color newTableColor;
+    private InputAction actionBinding;
 	
 	bool isMaster;
 
@@ -132,7 +136,16 @@ public class GameMultiplayer : MonoBehaviour
 		//newTableColor = new Color (originalTableColor.r, originalTableColor.g, originalTableColor.b, 1.0f);
 		
 		Debug.Log("player is " + player);
+
+        actionBinding = inputManager.actionAssets[0].FindActionMap("Main").FindAction("Y Constraint"); 
+        actionBinding.performed += _ => passthroughAction();
     }
+
+    private void OnDisable() {
+        if(actionBinding == null) {return;}
+        actionBinding.performed -= _ => passthroughAction();
+    }
+
 
     public void passthroughAction()
     {
