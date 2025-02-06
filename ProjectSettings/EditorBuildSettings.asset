@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
+    path: Assets/Samples/XR Interaction Toolkit/3.0.6/Starter Assets/DemoScene.unity
+    guid: 319dafa5c80f29f428dc1e0d03f04177
+  - enabled: 0
     path: Assets/Scenes/ARtest.unity
     guid: 62128ab259b8144fe8534120a46619d9
   - enabled: 0
@@ -21,6 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Multiplayer/WaitingRoom.unity
     guid: 90261fa66e7dae5498df47b983bb6c3f
   - enabled: 1
+    path: Assets/Scenes/Outside_Final.unity
+    guid: 2729a33be850c4e4aa55a41e8c81074f
+  - enabled: 0
     path: Assets/Scenes/outside passthrough2.unity
     guid: 21f7976cb296a1f41b07101a076db862
   - enabled: 1
