@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a2a7671dd84614da096e09a9866ade, type: 3}
+  m_Name: SoundBank
+  m_EditorClassIdentifier: 
+  buttonSFX:
+  - {fileID: 11400000, guid: 58f66a500a5e60f4ca9c5096e24ca3cd, type: 2}
+  wrongMatchSFX:
+  - {fileID: 11400000, guid: 6b4397df59224a748ad32969891521ec, type: 2}
+  rightMatchSFX:
+  - {fileID: 11400000, guid: 057a508857fd62e4c822b880b0dc4eb1, type: 2}
+  leaveBalloonSFX:
+  - {fileID: 11400000, guid: ade6c5d204008654d9569310105e394d, type: 2}
+  - {fileID: 11400000, guid: 688cf4053dab1dc4fa252aef00cae6fa, type: 2}
+  - {fileID: 11400000, guid: cfaf91ce26dc4114d9e30d96f241f2a0, type: 2}
+  pickupBalloonSFX:
+  - {fileID: 11400000, guid: cf531b7a0bb289b449b3ea0e8cdfb0c4, type: 2}
+  - {fileID: 11400000, guid: 4a642353ffe7a02458e850b4f161afa8, type: 2}
+  - {fileID: 11400000, guid: 0765b25f53a9018479e1b41d8a8ef84b, type: 2}

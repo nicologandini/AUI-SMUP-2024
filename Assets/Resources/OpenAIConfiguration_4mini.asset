@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d7ca99533264e939ed60ffc81f03d20, type: 3}
+  m_Name: OpenAIConfiguration_4mini
+  m_EditorClassIdentifier: 
+  apiKey: 4FBr1S0UvzJYSLGgs8xBQ9MtbfVd2yoXyYrODVvxP3Tcn4Z82hPVJQQJ99BBACfhMk5XJ3w3AAABACOGIi0o
+  organizationId: 
+  projectId: 
+  useAzureOpenAI: 1
+  proxyDomain: 
+  resourceName: SMUP-mini
+  deploymentId: gpt-4
+  useAzureActiveDirectory: 0
+  apiVersion: 2023-09-15-preview

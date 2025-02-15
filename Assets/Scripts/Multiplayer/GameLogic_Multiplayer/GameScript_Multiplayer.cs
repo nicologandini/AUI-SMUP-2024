@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
+using SMUP.AI;
+using SMUP.Audio;
 using SMUP.GameLogic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,15 +16,26 @@ public class GameMultiplayer : MonoBehaviour
     [Header("Master player ref")]
     [SerializeField] List <GameObject> stationsPlayer1 = null;      // Inputs in Unity
     [SerializeField] List <GameObject> balloonsPlayer1 = null;      // Inputs in Unity
+    [SerializeField] List <GameObject> buttonsPlayer1 = null;      // Inputs in Unity
+
     [Header("Guest player ref")]
     [SerializeField] List <GameObject> stationsPlayer2 = null;      // Inputs in Unity
     [SerializeField] List <GameObject> balloonsPlayer2 = null;      // Inputs in Unity
+    [SerializeField] List <GameObject> buttonsPlayer2 = null;      // Inputs in Unity
+
+
+    [Header("Sounds")]
+    [SerializeField] AudioClipEnum rightMatchSFX;
+    [SerializeField] AudioClipEnum wrongMatchSFX;
+
 
     [Header("Utils")]
     [SerializeField] DisableOtherPlayerObjects disabler;
     [SerializeField] AutoMoveBalloons autoMoveBalloons;
     [SerializeField] RequestMatchHandler requestMatchHandler;
     [SerializeField] private InputActionManager inputManager;
+
+    [SerializeField] private TextTTS_SO startingText;
 
 
     List <GameObject> _stationsPlayer = null;  
@@ -40,10 +53,29 @@ public class GameMultiplayer : MonoBehaviour
 	
 	bool isMaster;
 
+    public bool StartInAR = false;
+
+    void Awake()
+    {
+        GameInstance = this;
+
+        mainCamera = Camera.main;
+        Debug.Log(mainCamera);
+        Debug.Log(mainCamera.clearFlags);
+
+        GameObject camera = GameObject.Find("MR Interaction Setup");
+        GameObject xrorigin = camera.transform.GetChild(3).gameObject;
+        camera = xrorigin.transform.GetChild(0).gameObject;
+        passthrough = camera.transform.GetChild(0).gameObject;
+        passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameInstance = this;
+        if(StartInAR) {
+            //ActivateAR();
+        }
 
 		// disabilitare da qui per attivare pasthru
         if (disabler == null) {
@@ -64,6 +96,7 @@ public class GameMultiplayer : MonoBehaviour
 
             //disabler.DisableObjects(stationsPlayer2);
             disabler.DisableObjects(balloonsPlayer2);
+            disabler.DisableObjects(buttonsPlayer2);
 			
 			isMaster = true;
         } else {
@@ -72,12 +105,22 @@ public class GameMultiplayer : MonoBehaviour
 
             //disabler.DisableObjects(stationsPlayer1);
             disabler.DisableObjects(balloonsPlayer1);
+            disabler.DisableObjects(buttonsPlayer1);
 			
 			isMaster = false;
         }
 
-        /*
-        if (autoMoveBalloons.SortAtStart) {
+
+        foreach (var station in _stationsPlayer) {
+            ColliderDetection collider = station.GetComponentInChildren<ColliderDetection>();
+            if(collider == null) {
+                Debug.LogWarning("No ColliderDetection found for" + station.name);
+                continue;
+            }
+            collider.SetOwnedBalloons(_balloonsPlayer);
+        }
+
+        if (autoMoveBalloons != null && autoMoveBalloons.SortAtStart) {
             autoMoveBalloons.SetBalloons(_balloonsPlayer.ToArray<GameObject>());
             autoMoveBalloons.SetDeliverySpots(_stationsPlayer.ToArray<GameObject>());
 
@@ -85,6 +128,7 @@ public class GameMultiplayer : MonoBehaviour
         }
         
 		
+        /*
         if(_stationsPlayer.Count != _stationsPlayer.Count){
             Debug.Log("Wrong number of balloons or statios!");
         } else {
@@ -112,16 +156,10 @@ public class GameMultiplayer : MonoBehaviour
         }
 
 
-        mainCamera = Camera.main;
-        Debug.Log(mainCamera);
-        Debug.Log(mainCamera.clearFlags);
+
         //Console_UI.Instance.ClearLog();
 
-        GameObject camera = GameObject.Find("MR Interaction Setup");
-        GameObject xrorigin = camera.transform.GetChild(3).gameObject;
-        camera = xrorigin.transform.GetChild(0).gameObject;
-        passthrough = camera.transform.GetChild(0).gameObject;
-        passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
+
 
         // // Pretend to press the button
         // if (PhotonNetwork.IsMasterClient) {
@@ -139,6 +177,13 @@ public class GameMultiplayer : MonoBehaviour
 
         actionBinding = inputManager.actionAssets[0].FindActionMap("Main").FindAction("Y Constraint"); 
         actionBinding.performed += _ => passthroughAction();
+
+        DirectSpeechManager speechMaager = DirectSpeechManager.Instance;
+        if (speechMaager != null) {
+            speechMaager.StartSpeech(startingText, 0f);
+        }
+        
+        print("End game start");
     }
 
     private void OnDisable() {
@@ -146,6 +191,12 @@ public class GameMultiplayer : MonoBehaviour
         actionBinding.performed -= _ => passthroughAction();
     }
 
+
+    private void ActivateAR() {
+        if(passthrough.GetComponent<OVRPassthroughLayer>().enabled == true) return;
+
+        passthroughAction();
+    }
 
     public void passthroughAction()
     {
@@ -165,7 +216,6 @@ public class GameMultiplayer : MonoBehaviour
             setGround(true);
             setGrass(true);
             setClouds(true);
-
         }
         else
         {
@@ -335,14 +385,13 @@ public class GameMultiplayer : MonoBehaviour
             return;
         }
 
+        PhotonView photonView = PhotonView.Get(this);
         if (!getLists(colorsList))
         {
-            Console_UI.Instance.ConsolePrint("Not a match!");
-            return;
+            photonView.RPC("Lost", RpcTarget.All);  
+        } else {
+            photonView.RPC("Win", RpcTarget.All);  
         }
-
-        PhotonView photonView = PhotonView.Get(this);
-        photonView.RPC("Win", RpcTarget.All);  
     }
 
     public Player getPlayer(GameObject balloon)
@@ -432,10 +481,24 @@ public class GameMultiplayer : MonoBehaviour
         return (allColors.Split(",", StringSplitOptions.RemoveEmptyEntries)).ToList<string>();
     }
 
+    /// <summary>
+    /// Called when the playeers get a correct match
+    /// </summary>
     [PunRPC]
     private void Win() {
+        AudioManager.Instance.PlayAudioEnum(rightMatchSFX);
         Console_UI.Instance.ClearLog();
         Console_UI.Instance.ConsolePrint("All matches!", 40);
+    }
+
+    /// <summary>
+    /// Called when the players get a wrong match
+    /// </summary>
+    [PunRPC]
+    private void Lost() {
+        AudioManager.Instance.PlayAudioEnum(wrongMatchSFX);     
+        Console_UI.Instance.ConsolePrint("Not a match!");
+        print("Not a match!");
     }
 
     private void FakeButtonPress() {

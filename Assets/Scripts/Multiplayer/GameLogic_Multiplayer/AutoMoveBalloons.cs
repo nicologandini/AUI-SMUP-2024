@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class AutoMoveBalloons : MonoBehaviour
 {
-    [SerializeField] private GameObject[] balloons;
-    [SerializeField] private GameObject[] deliverySpots;
+    private GameObject[] balloons;
+    private GameObject[] deliverySpots;
 
 
     [SerializeField] private bool sortAtStart = false;

@@ -5,7 +5,8 @@ using System.Text.RegularExpressions;
 using static GameMultiplayer;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
-using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;       //Changed to multiplayer
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
+using SMUP.Audio;       //Changed to multiplayer
 
 public class ColliderDetection : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class ColliderDetection : MonoBehaviour
     public float intensity = 0.5f; // Intensità della vibrazione (da 0 a 1)
     public float duration = 0.2f;  // Durata della vibrazione in secondi
     public float frequency = 0.0f;  // 0.0 per usare valore di default
+    [Header ("Sound"), SerializeField] private AudioClipEnum audioClipEnum;
+ 
+
+    private List<GameObject> ownBallons;
 
 
 	private GameObject collidingObject = null;
@@ -25,7 +30,7 @@ public class ColliderDetection : MonoBehaviour
             collidingObject = c.gameObject;
             Debug.Log("Collision on " + this.transform.parent.gameObject + " by " + collidingObject);  //.getInstanceID()
             // Change the plate colour
-            if (SingletonScript.Instance.getStationColor(this.transform.parent.gameObject) == "yellow (Instance)")
+            if (SingletonScript.Instance.getStationColor(this.transform.parent.gameObject) == "yellow (Instance)" && ownBallons != null && ownBallons.Contains(c.gameObject))
             {
                 SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "grey");
 				GameInstance.changeOtherStation(this.transform.parent.gameObject, 1);
@@ -33,16 +38,15 @@ public class ColliderDetection : MonoBehaviour
             }
             
             GameInstance.addBalloon(collidingObject, this.transform.parent.gameObject);
-        }
 
+            HapticImpulsePlayer interactor = c.GetComponent<HapticImpulsePlayer>();
+            DebugDialogue.Instance.AppendInfoText("Interactor is null?:" + (interactor == null));
 
-        HapticImpulsePlayer interactor = c.GetComponent<HapticImpulsePlayer>();
-        DebugDialogue.Instance.AppendInfoText("Interactor is null?:" + (interactor == null));
-
-        if (interactor != null)
-        {
-            DebugDialogue.Instance.AppendInfoText("Interactor is " + interactor.gameObject.name);
-            interactor.SendHapticImpulse(intensity, duration, frequency);
+            if (interactor != null)
+            {
+                DebugDialogue.Instance.AppendInfoText("Interactor is " + interactor.gameObject.name);
+                interactor.SendHapticImpulse(intensity, duration, frequency);
+            }
         }
     }
     private void OnTriggerExit(Collider c)
@@ -57,5 +61,8 @@ public class ColliderDetection : MonoBehaviour
             collidingObject = null;
         }
     }
-}
 
+    public void SetOwnedBalloons(List<GameObject> _balloons) {
+        ownBallons = _balloons;
+    }
+}

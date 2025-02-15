@@ -24,8 +24,10 @@ MonoBehaviour:
     m_path: Assets/Scenes/Multiplayer/Lobby.unity
   - m_enabled: 0
     m_path: Assets/Scenes/OutsideScene.unity
-  - m_enabled: 1
+  - m_enabled: 0
     m_path: Assets/Scenes/outside passthrough2.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Outside_Final.unity
   - m_enabled: 1
     m_path: Assets/Scenes/Multiplayer/WaitingRoom.unity
   m_ScriptingDefines: []

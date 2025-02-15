@@ -10,10 +10,13 @@ namespace SMUP.AI {
         [SerializeField] private GameObject thinkingCloud;
         [SerializeField] private GameObject okCloud;
         [SerializeField] private GameObject negativeCloud;
+        [SerializeField] private GameObject listeningCloud;
+
 
         private void Start() {
             SetThinkingCloud(false);
             SetNegativeCloud(false);
+            SetListeningCloud(false);
             SetOkCloud(false);
         }
 
@@ -21,6 +24,7 @@ namespace SMUP.AI {
         public void SetAllCloud(bool value) {
             SetNegativeCloud(value);
             SetThinkingCloud(value);
+            SetListeningCloud(value);
             SetOkCloud(value);
         }
 
@@ -36,6 +40,10 @@ namespace SMUP.AI {
 
                 case CloudType.THINKING_CLOUD:
                     SetThinkingCloud(value);
+                    break;
+
+                case CloudType.LISTENING_CLOUD:
+                    SetListeningCloud(value);
                     break;
 
                 default:
@@ -60,9 +68,14 @@ namespace SMUP.AI {
 
             negativeCloud.SetActive(value);
         }
+        private void SetListeningCloud(bool value) {
+            if(listeningCloud == null) { return; }
+
+            listeningCloud.SetActive(value);
+        }
     }
 }
 
 public enum CloudType {
-    NONE, OK_CLOUD, NEGATIVE_CLOUD, THINKING_CLOUD
+    NONE, OK_CLOUD, NEGATIVE_CLOUD, THINKING_CLOUD, LISTENING_CLOUD
 }

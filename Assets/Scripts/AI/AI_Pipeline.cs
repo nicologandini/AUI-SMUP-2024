@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.CognitiveServices.Speech;
 using Photon.Pun;
 using TMPro;
+//using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -31,12 +32,13 @@ namespace SMUP.AI {
         [SerializeField] private bool isDebug;
         
 
-
+        public AI_TTS TTS => tts;
 
         private InputAction actionBinding;
 
 
         private bool canTalk = false;
+        private bool isAIPerforming = false;
 
 
         // Start is called before the first frame update
@@ -67,38 +69,53 @@ namespace SMUP.AI {
             }
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>True if AI sucessfully blocked. False if AI is already talking</returns>
+        public bool SetPipelineStatus(bool value) {
+            if(isAIPerforming) {return false;}
+
+            if(value) {
+                SetTalkState(true);
+                SetAvatarCloud(CloudType.NONE, false);
+            } else {
+                SetTalkState(false);
+                SetAvatarCloud(CloudType.NEGATIVE_CLOUD, false);
+            }
+
+            return true;
+        }
+
+
         async void StartSpeechPipeline()
         {
             if (!canTalk) { return; }
-            if (photonView != null) {
-                photonView.RPC("SetTalkLock", RpcTarget.Others, false);  
-            }   
-            canTalk = false;
-            print("talking");
-            if (isDebug) {DebugDialogue.Instance.AppendInfoText("talking");}
-            SetAvatarCloud(CloudType.THINKING_CLOUD, true);
+            isAIPerforming = true;
+            SetTalkState(false);
+            SetAvatarCloud(CloudType.LISTENING_CLOUD, true);
             
             string text = await sst.SpeechToText(actionBinding, speechTimeOut);
             if(text ==  null || text == "") {
                 Debug.Log("NO valid text found!");
+                SetTalkState(true);
                 SetAvatarCloud(CloudType.NONE, false);
+                isAIPerforming = false;
                 return;
             }
 
+            SetAvatarCloud(CloudType.THINKING_CLOUD, true);
             text = $"Utente1 dice: {text}";
             string response = await ai_Conversation.SubmitChat(text);
 
             SetAvatarCloud(CloudType.OK_CLOUD, true);
             await tts.TextToSpeech(response);
 
-
-            canTalk = true;
-            if (photonView != null) {
-                photonView.RPC("SetTalkLock", RpcTarget.Others, true);  
-            }   
-            print("Can talk again");
-            if (isDebug) {DebugDialogue.Instance.AppendInfoText("Can taalk again");}
+            SetTalkState(true);
             SetAvatarCloud(CloudType.NONE, false);
+            isAIPerforming = false;
         }
 
         async void Test() {
@@ -106,6 +123,7 @@ namespace SMUP.AI {
             string response = await ai_Conversation.SubmitChat("ciao");
             print(response);
         }
+
 
         [PunRPC] 
         private void SetTalkLock(bool value) {
@@ -125,6 +143,16 @@ namespace SMUP.AI {
 
             avatarManager.SetAllCloud(false);
             avatarManager.SetCloud(cloudType, value);
+        }
+
+        private void SetTalkState(bool state) {
+            canTalk = state;
+            if (photonView != null) {
+                photonView.RPC("SetTalkLock", RpcTarget.Others, state);  
+            }   
+            
+            print(state?"Can talk again":"Talking to AI");
+            if (isDebug) {DebugDialogue.Instance.AppendInfoText("talking");}
         }
     }
 }

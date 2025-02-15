@@ -43,6 +43,7 @@ namespace SMUP.AI {
                 ChatResponse response = await openAI.ChatEndpoint.StreamCompletionAsync(request, resultHandler: deltaResponse =>{}, cancellationToken: destroyCancellationToken);
 
                 conversation.AppendMessage(response.FirstChoice.Message);
+                PrintMessages();
                 return response;
             }
             catch (Exception e)
@@ -63,6 +64,17 @@ namespace SMUP.AI {
             }
 
             return "";
+    
+        }
+
+        private void PrintMessages() {
+            print("Sent Messages:");
+
+            foreach (var message in conversation.Messages) {
+                print(message);
+            }
+
+            print("");
         }
     }
 }
