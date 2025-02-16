@@ -48,7 +48,7 @@ public class ValueSceneTranferer : MonoBehaviour
 
         InitializeDictionary();
 
-        Invoke("AddTestValues", 1f);
+        //Invoke("AddTestValues", 1f);
     }
 
 
