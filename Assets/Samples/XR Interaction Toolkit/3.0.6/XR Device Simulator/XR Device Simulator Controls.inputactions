@@ -162,7 +162,7 @@
                     "name": "Z Constraint",
                     "type": "Button",
                     "id": "d3e9308c-6f8c-46f7-bb6f-14422c345983",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -171,7 +171,7 @@
                     "name": "X Constraint",
                     "type": "Button",
                     "id": "11dc7a94-7230-49ff-b56d-06e6473e9951",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -180,7 +180,7 @@
                     "name": "Y Constraint",
                     "type": "Button",
                     "id": "11ab79c6-b9c6-4301-8086-3e9c6904ef14",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -225,7 +225,7 @@
                     "name": "Toggle Device Position Target",
                     "type": "Button",
                     "id": "15cd3c4a-56b1-4a43-a924-a2118e2adaf4",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -399,8 +399,52 @@
                 },
                 {
                     "name": "",
+                    "id": "f3781d4b-f511-42bd-8bd9-0ec9409a1af3",
+                    "path": "<XRController>{RightHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X Constraint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba9ea4ea-0abf-4755-9a04-7af7fce2f1a7",
+                    "path": "<XRController>{RightHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X Constraint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "71c185e1-73fb-4691-b910-70610f397b42",
                     "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Y Constraint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9304223-0ba1-41d3-923b-61a9db3b6da7",
+                    "path": "<XRController>{LeftHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Y Constraint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "76f35647-45fa-42a6-89f5-5857247a3cb3",
+                    "path": "<XRController>{LeftHand}/{SecondaryButton}",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

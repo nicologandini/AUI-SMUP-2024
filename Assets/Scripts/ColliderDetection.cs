@@ -2,10 +2,24 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text.RegularExpressions;
-using static Game;
+using static GameMultiplayer;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
+using SMUP.Audio;       //Changed to multiplayer
 
 public class ColliderDetection : MonoBehaviour
 {
+    [SerializeField] private HapticImpulsePlayer m_HapticImpulsePlayer;
+    public float intensity = 0.5f; // Intensità della vibrazione (da 0 a 1)
+    public float duration = 0.2f;  // Durata della vibrazione in secondi
+    public float frequency = 0.0f;  // 0.0 per usare valore di default
+    [Header ("Sound"), SerializeField] private AudioClipEnum audioClipEnum;
+ 
+
+    private List<GameObject> ownBallons;
+
+
 	private GameObject collidingObject = null;
     
     private void OnTriggerEnter(Collider c)
@@ -16,25 +30,39 @@ public class ColliderDetection : MonoBehaviour
             collidingObject = c.gameObject;
             Debug.Log("Collision on " + this.transform.parent.gameObject + " by " + collidingObject);
             // Change the plate colour
-            if (SingletonScript.Instance.getStationColor(this.transform.parent.gameObject) == "yellow (Instance)")
+            if (SingletonScript.Instance.getStationColor(this.transform.parent.gameObject) == "yellow (Instance)" && ownBallons != null && ownBallons.Contains(c.gameObject))
             {
                 SingletonScript.Instance.stationColour(this.transform.parent.gameObject, "grey");
+				GameInstance.changeOtherStation(this.transform.parent.gameObject, 1);
+                //SingletonScript.Instance.stationColour(GameInstance.getOtherStation(this.transform.parent.gameObject), "grey");
             }
             
             GameInstance.addBalloon(collidingObject, this.transform.parent.gameObject);
+
+            HapticImpulsePlayer interactor = c.GetComponent<HapticImpulsePlayer>();
+            DebugDialogue.Instance.AppendInfoText("Interactor is null?:" + (interactor == null));
+
+            if (interactor != null)
+            {
+                DebugDialogue.Instance.AppendInfoText("Interactor is " + interactor.gameObject.name);
+                interactor.SendHapticImpulse(intensity, duration, frequency);
+            }
         }
     }
-    
     private void OnTriggerExit(Collider c)
     {
         Debug.Log("Exit event from the trigger");
         if (c.tag == "SortingObject")
         {
-			Debug.Log("Free Young Thug");
+            collidingObject = c.gameObject;
+            Debug.Log("Free Young Thug");
 
             GameInstance.removeBalloon(collidingObject, this.transform.parent.gameObject);
             collidingObject = null;
         }
     }
-}
 
+    public void SetOwnedBalloons(List<GameObject> _balloons) {
+        ownBallons = _balloons;
+    }
+}

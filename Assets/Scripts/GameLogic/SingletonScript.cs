@@ -22,7 +22,8 @@ public class SingletonScript : MonoBehaviour
         child.gameObject.GetComponent<Renderer>().material = Resources.Load(mat, typeof(Material)) as Material;
     }
 
-    public string getStationColor(GameObject station) {
+    public string getStationColor(GameObject station)
+    {
 
         Transform child = station.transform.Find(plate);
         return child.gameObject.GetComponent<Renderer>().material.name;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
-using System;
+using SMUP.GameLogic;
+using SMUP.AI;
 
 public class Game : MonoBehaviour
 {
@@ -18,6 +18,13 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     List <GameObject> balloonsPlayer2 = null; // Inputs in Unity
+	
+	[SerializeField]
+    List <GameObject> otherStations = null; // Inputs in Unity
+
+
+    [SerializeField] private TextTTS_SO startingText;
+
 
     int balloons_counter = 0;
 
@@ -39,8 +46,8 @@ public class Game : MonoBehaviour
         // deliveredBalloons_R = new List<int> (new int[balloons_counter]);
 
         players = new List<Player>();
-        players.Add(new Player(balloonsPlayer1, stationsPlayer1));
-        players.Add(new Player(balloonsPlayer2, stationsPlayer2));
+        players.Add(new Player(balloonsPlayer1, stationsPlayer1/*, otherStations*/));
+        players.Add(new Player(balloonsPlayer2, stationsPlayer2/*, otherStations*/));
 
         p0 = players[0];
         p1 = players[1];
@@ -74,6 +81,9 @@ public class Game : MonoBehaviour
         //Transform childTransform = s1.transform.Find("Balloon_station_plate");
         //Debug.Log("La posizione del plate e': " + childTransform.position);
         //childTransform.gameObject.SetActive(false);
+
+        DirectSpeechManager.Instance.StartSpeech(startingText);
+        print("End game start");
     }
 
     public void addBalloon(GameObject balloon, GameObject station){
