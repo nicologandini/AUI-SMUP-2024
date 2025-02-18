@@ -37,6 +37,11 @@ public class GameMultiplayer : MonoBehaviour
 
     [SerializeField] private TextTTS_SO startingText;
 
+    [Header("Starting Pose Handler")]
+    [SerializeField] StartingPositionManager playerStartingPosSetter;
+    [SerializeField] Transform masterDesiredPose;
+    [SerializeField] Transform guestDesiredPose;
+
 
     List <GameObject> _stationsPlayer = null;  
     List <GameObject> _balloonsPlayer = null; 
@@ -53,7 +58,7 @@ public class GameMultiplayer : MonoBehaviour
 	
 	bool isMaster;
 
-    public bool StartInAR = false;
+    [HideInInspector] public bool StartInAR = false;
 
     void Awake()
     {
@@ -68,6 +73,14 @@ public class GameMultiplayer : MonoBehaviour
         camera = xrorigin.transform.GetChild(0).gameObject;
         passthrough = camera.transform.GetChild(0).gameObject;
         passthrough.GetComponent<OVRPassthroughLayer>().enabled = false;
+
+        if(playerStartingPosSetter != null) {
+            if(PhotonNetwork.IsMasterClient) {
+                playerStartingPosSetter.SetCompletePose(masterDesiredPose);
+            } else {
+                playerStartingPosSetter.SetCompletePose(guestDesiredPose);
+            }
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

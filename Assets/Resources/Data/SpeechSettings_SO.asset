@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd57f0444cf1583438d7e76afb0e2fa8, type: 3}
   m_Name: SpeechSettings_SO
   m_EditorClassIdentifier: 
-  speechAPIKey: a2b7f4a92edc44a69fabb0beeed2fc05
+  speechAPIKey: 7DxYdhcEBc47cbWc7xsebHu2ojsfb9Q9T4jjaAFrhROvrLCWnd8gJQQJ99BBAC5RqLJXJ3w3AAAYACOG4V2g
   region: westeurope
   recognitionLanguage: it-IT
   voiceName: it-IT-MarcelloMultilingualNeural

@@ -107,7 +107,7 @@ namespace SMUP.AI {
             }
 
             SetAvatarCloud(CloudType.THINKING_CLOUD, true);
-            text = $"Utente1 dice: {text}";
+            //text = $"Utente1 dice: {text}";
             string response = await ai_Conversation.SubmitChat(text);
 
             SetAvatarCloud(CloudType.OK_CLOUD, true);
@@ -138,7 +138,7 @@ namespace SMUP.AI {
             print($"Lock AI set to {value} by other");
         }
 
-        private void SetAvatarCloud(CloudType cloudType, bool value) {
+        public void SetAvatarCloud(CloudType cloudType, bool value) {
             if (avatarManager == null) { return; }
 
             avatarManager.SetAllCloud(false);

@@ -5,6 +5,7 @@ using UnityEngine.XR;
 public class MenuUIManager : MonoBehaviour {
     [Header ("Menu Elements")]
     [SerializeField] private Image menuBG;
+    [SerializeField] private ButtonsChangeStateManager menuButtonsManager;
 
     [Header ("Main Menu")]
     [SerializeField] private Sprite mainMenuBG;
@@ -62,6 +63,7 @@ public class MenuUIManager : MonoBehaviour {
 
     private void ActivateMainMenuUI() {
         menuBG.sprite = mainMenuBG;
+        menuButtonsManager.ButtonPressed(0);
         mainMenuAssets.SetActive(true);
     }
     private void DeactivateMainMenuUI() {
@@ -70,6 +72,7 @@ public class MenuUIManager : MonoBehaviour {
 
     private void ActivateMenuSettingsUI() {
         menuBG.sprite = settingsMenuBG;
+        menuButtonsManager.ButtonPressed(1);
         settingsMenuAssets.SetActive(true);
     } 
     private void DeactivateMenuSettingsUI() {

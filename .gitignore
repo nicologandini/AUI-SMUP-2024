@@ -82,3 +82,8 @@ crashlytics-build.properties
 
 # Mac files
 .DS_Store
+
+#Resources
+Assets/Resources/OpenAI
+#Assets/Resources/OpenAI/*
+Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset

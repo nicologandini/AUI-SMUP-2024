@@ -81,9 +81,9 @@ public class PlayerBoundaryLimit : MonoBehaviour
         if(deltaPos < _deltaPosThreshold) {return;}
 
         //Debug
-        DebugDialogue.Instance.AppendInfoText($"Repositioning del player da posizione: {visorTransform.position}");
-        DebugDialogue.Instance.AppendInfoText("");
-        CheckDeltaPositions(visorTransform);
+        // DebugDialogue.Instance.AppendInfoText($"Repositioning del player da posizione: {visorTransform.position}");
+        // DebugDialogue.Instance.AppendInfoText("");
+        // CheckDeltaPositions(visorTransform);
         //END Debug
 
         playerController.enabled = false;
@@ -98,7 +98,7 @@ public class PlayerBoundaryLimit : MonoBehaviour
         //print("XR_Camera:" + XR_Origin.Camera); //Center eye offset;
         playerController.enabled = true;
 
-        SaveChildrenPosition(visorTransform);
+        //SaveChildrenPosition(visorTransform);
     }
 
     //Debug

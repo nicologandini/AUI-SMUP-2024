@@ -13,6 +13,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs;
 namespace SMUP.AI {
     public class AI_STT_Android : MonoBehaviour {
         [SerializeField] private SpeechSettings_SO speechSettings_SO;
+        [SerializeField] private AI_Pipeline pipeline;
 
 
         [Header("Recoding Values")]
@@ -216,6 +217,9 @@ namespace SMUP.AI {
             audioInputStream.Close();
 
             // Avvia il riconoscimento
+            if (pipeline != null) {
+                pipeline.SetAvatarCloud(CloudType.THINKING_CLOUD, true);
+            }
             var recognitionResult = await recognizer.RecognizeOnceAsync();
 
             if (recognitionResult.Reason == ResultReason.RecognizedSpeech)
