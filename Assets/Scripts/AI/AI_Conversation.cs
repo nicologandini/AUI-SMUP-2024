@@ -54,8 +54,9 @@ namespace SMUP.AI {
                     case OperationCanceledException:
                         break;
                     default:
+                        //print("Errore durenrte richiesta a buddy");
                         Debug.LogError(e);
-                        break;
+                        return "Scusa ho le pile scariche, prova a richiedere piu tardi";
                 }
             }
             finally

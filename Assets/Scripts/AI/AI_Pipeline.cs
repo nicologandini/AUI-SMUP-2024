@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using it.polimi.smup2;
 using Microsoft.CognitiveServices.Speech;
 using Photon.Pun;
 using TMPro;
@@ -16,6 +17,8 @@ namespace SMUP.AI {
         [SerializeField] private AI_STT_Android sst;
         [SerializeField] private AI_TTS tts;
         [SerializeField] private AI_Conversation ai_Conversation;
+
+        [SerializeField] private DirectSpeechManager directSpeech;
 
         [Header ("Parameters")]
         [SerializeField] private InputActionManager inputManager;
@@ -38,7 +41,9 @@ namespace SMUP.AI {
 
 
         private bool canTalk = false;
-        private bool isAIPerforming = false;
+        private bool isAIPerforming = false;    //usato per controllare se directspeech puo eseguire
+
+        [HideInInspector] public string PlayerName = "";
 
 
         // Start is called before the first frame update
@@ -83,7 +88,7 @@ namespace SMUP.AI {
                 SetAvatarCloud(CloudType.NONE, false);
             } else {
                 SetTalkState(false);
-                SetAvatarCloud(CloudType.NEGATIVE_CLOUD, false);
+                SetAvatarCloud(CloudType.NEGATIVE_CLOUD, true);
             }
 
             return true;
@@ -107,7 +112,10 @@ namespace SMUP.AI {
             }
 
             SetAvatarCloud(CloudType.THINKING_CLOUD, true);
-            //text = $"Utente1 dice: {text}";
+
+            if(PlayerName != null && PlayerName != "") {
+                text = $"{PlayerName} dice: {text}";
+            }
             string response = await ai_Conversation.SubmitChat(text);
 
             SetAvatarCloud(CloudType.OK_CLOUD, true);
@@ -129,6 +137,10 @@ namespace SMUP.AI {
         private void SetTalkLock(bool value) {
             canTalk = value;
 
+            if(directSpeech != null) {
+                directSpeech.IsTalking = !value;
+            }
+
             if(!canTalk) {
                 SetAvatarCloud(CloudType.NEGATIVE_CLOUD, true);
             } else {
@@ -147,9 +159,13 @@ namespace SMUP.AI {
 
         private void SetTalkState(bool state) {
             canTalk = state;
+
             if (photonView != null) {
                 photonView.RPC("SetTalkLock", RpcTarget.Others, state);  
             }   
+            if(directSpeech != null) {
+                directSpeech.IsTalking = !state;
+            }
             
             print(state?"Can talk again":"Talking to AI");
             if (isDebug) {DebugDialogue.Instance.AppendInfoText("talking");}

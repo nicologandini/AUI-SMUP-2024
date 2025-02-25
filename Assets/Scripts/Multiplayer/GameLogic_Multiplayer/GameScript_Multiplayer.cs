@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
@@ -34,8 +35,9 @@ public class GameMultiplayer : MonoBehaviour
     [SerializeField] AutoMoveBalloons autoMoveBalloons;
     [SerializeField] RequestMatchHandler requestMatchHandler;
     [SerializeField] private InputActionManager inputManager;
+    [SerializeField] private WinManager winManager;
+    [SerializeField] private float secondsBetweenMatches = 3f;
 
-    [SerializeField] private TextTTS_SO startingText;
 
     [Header("Starting Pose Handler")]
     [SerializeField] StartingPositionManager playerStartingPosSetter;
@@ -59,6 +61,9 @@ public class GameMultiplayer : MonoBehaviour
 	bool isMaster;
 
     [HideInInspector] public bool StartInAR = false;
+
+    private bool canMatch = true;
+    Coroutine matchCooldownCoroutine;
 
     void Awake()
     {
@@ -193,7 +198,7 @@ public class GameMultiplayer : MonoBehaviour
 
         DirectSpeechManager speechMaager = DirectSpeechManager.Instance;
         if (speechMaager != null) {
-            speechMaager.StartSpeech(startingText, 0f);
+            speechMaager.StartSpeech(SpeechType.StartingSpeech, 0f);
         }
         
         print("End game start");
@@ -376,6 +381,9 @@ public class GameMultiplayer : MonoBehaviour
 
 
     public void RequestMatch() {
+        if(!canMatch) {Debug.LogWarning("Trying to request a match but still in cooldown"); return;}
+
+        canMatch = false;
         Console_UI.Instance.ConsolePrint("Requesting mathc");
 
         PhotonView photonView = PhotonView.Get(this);
@@ -384,6 +392,9 @@ public class GameMultiplayer : MonoBehaviour
 	
 	[PunRPC]
     public void performMatch(string colorNames){
+        //if(!canMatch) {return;}
+
+        canMatch = false;
         Console_UI.Instance.ConsolePrint("Colors Name: " + colorNames);
         List<string> colorsList = GetStrings(colorNames);
 
@@ -502,6 +513,19 @@ public class GameMultiplayer : MonoBehaviour
         AudioManager.Instance.PlayAudioEnum(rightMatchSFX);
         Console_UI.Instance.ClearLog();
         Console_UI.Instance.ConsolePrint("All matches!", 40);
+
+        winManager.Win();
+
+        if(matchCooldownCoroutine != null) {
+            StopCoroutine(matchCooldownCoroutine);
+        }
+
+        matchCooldownCoroutine = StartCoroutine(MatchCooldown());
+
+        DirectSpeechManager speechMaager = DirectSpeechManager.Instance;
+        if (speechMaager != null) {
+            speechMaager.StartSpeech(SpeechType.CorrectMatchSpeech, 0f);
+        }
     }
 
     /// <summary>
@@ -512,6 +536,16 @@ public class GameMultiplayer : MonoBehaviour
         AudioManager.Instance.PlayAudioEnum(wrongMatchSFX);     
         Console_UI.Instance.ConsolePrint("Not a match!");
         print("Not a match!");
+
+        if(matchCooldownCoroutine != null) {
+            StopCoroutine(matchCooldownCoroutine);
+        }
+
+        matchCooldownCoroutine = StartCoroutine(MatchCooldown());
+        DirectSpeechManager speechMaager = DirectSpeechManager.Instance;
+        if (speechMaager != null) {
+            speechMaager.StartSpeech(SpeechType.WrongMatchSpeech, 0f);
+        }
     }
 
     private void FakeButtonPress() {
@@ -593,4 +627,13 @@ public class GameMultiplayer : MonoBehaviour
 			SingletonScript.Instance.stationColour(stationsPlayer2[i], "green");
 		}
 	}
+
+
+    private IEnumerator MatchCooldown() {
+        print(gameObject.name + "can mathc: false");
+        canMatch = false;
+        yield return new WaitForSeconds(secondsBetweenMatches);
+        canMatch = true;
+        print(gameObject.name + "can mathc: true");
+    }
 }

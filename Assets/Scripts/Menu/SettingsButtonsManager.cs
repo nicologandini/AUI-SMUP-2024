@@ -55,4 +55,9 @@ public class SettingsButtonsManager : MonoBehaviour
         _isAROnStart = true;
         ARVR_ButtonsManager.ButtonPressed(1);
     }
+
+    public void NameFieldChangedValue(string name) {
+        transferer.AddOrUpdateValue("playerName", name);
+        print("Changed name to:" + transferer.GetValue("playerName"));
+    }
 }

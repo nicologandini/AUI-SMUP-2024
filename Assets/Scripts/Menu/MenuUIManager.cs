@@ -14,6 +14,8 @@ public class MenuUIManager : MonoBehaviour {
     [Header ("Settings")]
     [SerializeField] private Sprite settingsMenuBG;
     [SerializeField] private GameObject settingsMenuAssets;
+    [SerializeField] private VirtualKeyboard virtualKeyboard;
+
 
 
     private MenuState currState = MenuState.NONE;
@@ -76,6 +78,8 @@ public class MenuUIManager : MonoBehaviour {
         settingsMenuAssets.SetActive(true);
     } 
     private void DeactivateMenuSettingsUI() {
+        if(virtualKeyboard != null) {virtualKeyboard.SetCanvas(false);}
+
         settingsMenuAssets.SetActive(false);
     }
 
