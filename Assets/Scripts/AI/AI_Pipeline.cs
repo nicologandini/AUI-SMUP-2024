@@ -105,6 +105,9 @@ namespace SMUP.AI {
             string text = await sst.SpeechToText(actionBinding, speechTimeOut);
             if(text ==  null || text == "") {
                 Debug.Log("NO valid text found!");
+                SetAvatarCloud(CloudType.NEGATIVE_CLOUD, true);
+                await tts.TextToSpeech("Scusa non ho capito, puoi ripetere?");
+
                 SetTalkState(true);
                 SetAvatarCloud(CloudType.NONE, false);
                 isAIPerforming = false;
