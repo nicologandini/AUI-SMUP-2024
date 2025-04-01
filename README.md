@@ -17,9 +17,11 @@ Social MatchUP is the final test of "Advanced User Interfaces", course of "Compu
 ## Abstract
 Neurodevelopmental disorders (NDDs) can affect personal, social, academic, and job-related skills, and communication is one key area that often suffers. 
 
-**Social MatchUP** is a cooperative game designed to support children with Neurodevelopmental Disorders (NDDs) by improving their communication and cooperation skills. The main challenge in previous versions of the game was ensuring that players remained engaged while overcoming communication difficulties. While earlier iterations successfully introduced Virtual Reality (VR) and Augmented Reality (AR) to create an immersive and interactive experience, some users still struggled with progressing through tasks independently. Additionally, maintaining focus throughout the game posed a challenge, especially for children with attention-related difficulties. 
+**Social MatchUP** is a cooperative game designed to support children with Neurodevelopmental Disorders (NDDs) by improving their communication and cooperation skills. 
 
-The latest version of Social MatchUP introduces a significant enhancement: the integration of a **Large Language Model** (LLM) embodied as a virtual assistant named **Buddy**. Buddy is a visual robot that provides real-time assistance, offering game instructions and guidance when a player is stuck. By responding dynamically to player needs, Buddy ensures that children can navigate challenges without frustration, allowing them to continue engaging with the game. The assistant also plays a crucial role in helping users maintain focus, providing encouragement and interactive prompts tailored to their in-game behavior. To further enhance the user experience, visual hints have been incorporated into the gameplay, making interactions more intuitive and reducing cognitive load for the players.
+The main challenge in previous versions of the game was ensuring that players remained engaged while overcoming communication difficulties. While earlier iterations successfully introduced Virtual Reality (VR) and Augmented Reality (AR) to create an immersive and interactive experience, some users still struggled with progressing through tasks independently. Additionally, maintaining focus throughout the game posed a challenge, especially for children with attention-related difficulties. The previous versions utilized HoloLens 2 for AR and Meta Quest 2 for VR with hand tracking.
+
+The latest version of Social MatchUP introduces two significant enhancement: a complete integrated application with both **AR** and **VR** in the same headset and the integration of a **Large Language Model** (LLM) embodied as a virtual assistant named **Buddy**. Buddy is a visual robot that provides real-time assistance, offering game instructions and guidance when a player is stuck. By responding dynamically to player needs, Buddy ensures that children can navigate challenges without frustration, allowing them to continue engaging with the game. The assistant also plays a crucial role in helping users maintain focus, providing encouragement and interactive prompts tailored to their in-game behavior. To further enhance the user experience, visual hints have been incorporated into the gameplay, making interactions more intuitive and reducing cognitive load for the players.
 
 <img src="https://github.com/user-attachments/assets/f66bada0-929a-4bb2-bd01-42bb6f972669" alt="Buddy" width="280" height="300">
 
@@ -33,3 +35,10 @@ Unlike traditional interventions, which can be stressful or ineffective in captu
 
 ![Sorting game](https://github.com/user-attachments/assets/01ae331f-86ac-4a8f-b979-50fe8519f2ee)
 
+## Why is SMUP a good solution?
+Traditional speech and social skills training can feel repetitive and uninspiring. SMUP makes learning fun and interactive, keeping users engaged for longer periods while reinforcing important skills through cooperative gameplay. Furthermore, many individuals with NDDs find social interactions stressful. SMUP provides a controlled setting where they can practice without fear of failure or social pressure, allowing them to build confidence. By using Meta Quest 3 with joystick controls, SMUP ensures smooth, precise interactions that are easier for users with motor difficulties. The game is designed to be intuitive, reducing frustration and making it accessible to a wider range of players.
+
+## Technologies
+- Meta Quest 3
+- Photon Unity Networking (PUN)
+- OpenAI API
